@@ -1,0 +1,11 @@
+C:\Users\Dylan\Desktop\Proyecto\CentroEventos\CentroEventos.Repositorios\bin\Debug\net8.0\CentroEventos.Repositorios.deps.json
+C:\Users\Dylan\Desktop\Proyecto\CentroEventos\CentroEventos.Repositorios\bin\Debug\net8.0\CentroEventos.Repositorios.dll
+C:\Users\Dylan\Desktop\Proyecto\CentroEventos\CentroEventos.Repositorios\bin\Debug\net8.0\CentroEventos.Repositorios.pdb
+C:\Users\Dylan\Desktop\Proyecto\CentroEventos\CentroEventos.Repositorios\obj\Debug\net8.0\CentroEventos.Repositorios.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Dylan\Desktop\Proyecto\CentroEventos\CentroEventos.Repositorios\obj\Debug\net8.0\CentroEventos.Repositorios.AssemblyInfoInputs.cache
+C:\Users\Dylan\Desktop\Proyecto\CentroEventos\CentroEventos.Repositorios\obj\Debug\net8.0\CentroEventos.Repositorios.AssemblyInfo.cs
+C:\Users\Dylan\Desktop\Proyecto\CentroEventos\CentroEventos.Repositorios\obj\Debug\net8.0\CentroEventos.Repositorios.csproj.CoreCompileInputs.cache
+C:\Users\Dylan\Desktop\Proyecto\CentroEventos\CentroEventos.Repositorios\obj\Debug\net8.0\CentroEventos.Repositorios.dll
+C:\Users\Dylan\Desktop\Proyecto\CentroEventos\CentroEventos.Repositorios\obj\Debug\net8.0\refint\CentroEventos.Repositorios.dll
+C:\Users\Dylan\Desktop\Proyecto\CentroEventos\CentroEventos.Repositorios\obj\Debug\net8.0\CentroEventos.Repositorios.pdb
+C:\Users\Dylan\Desktop\Proyecto\CentroEventos\CentroEventos.Repositorios\obj\Debug\net8.0\ref\CentroEventos.Repositorios.dll
