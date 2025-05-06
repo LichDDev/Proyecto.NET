@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Dylan\\Desktop\\Proyecto\\CentroEventos\\CentroEventos.Aplicacion\\CentroEventos.Aplicacion.csproj",
+      "projectUniqueName": "C:\\Users\\Dylan\\Documents\\GitHub\\Proyecto.NET\\CentroEventos\\CentroEventos.Aplicacion\\CentroEventos.Aplicacion.csproj",
       "projectName": "CentroEventos.Aplicacion",
-      "projectPath": "C:\\Users\\Dylan\\Desktop\\Proyecto\\CentroEventos\\CentroEventos.Aplicacion\\CentroEventos.Aplicacion.csproj",
+      "projectPath": "C:\\Users\\Dylan\\Documents\\GitHub\\Proyecto.NET\\CentroEventos\\CentroEventos.Aplicacion\\CentroEventos.Aplicacion.csproj",
       "packagesPath": "C:\\Users\\Dylan\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Dylan\\Desktop\\Proyecto\\CentroEventos\\CentroEventos.Aplicacion\\obj\\",
+      "outputPath": "C:\\Users\\Dylan\\Documents\\GitHub\\Proyecto.NET\\CentroEventos\\CentroEventos.Aplicacion\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Dylan\\AppData\\Roaming\\NuGet\\NuGet.Config"

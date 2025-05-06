@@ -32,11 +32,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Dylan\\Desktop\\Proyecto\\CentroEventos\\CentroEventos.Repositorios\\CentroEventos.Repositorios.csproj",
+      "projectUniqueName": "C:\\Users\\Dylan\\Documents\\GitHub\\Proyecto.NET\\CentroEventos\\CentroEventos.Repositorios\\CentroEventos.Repositorios.csproj",
       "projectName": "CentroEventos.Repositorios",
-      "projectPath": "C:\\Users\\Dylan\\Desktop\\Proyecto\\CentroEventos\\CentroEventos.Repositorios\\CentroEventos.Repositorios.csproj",
+      "projectPath": "C:\\Users\\Dylan\\Documents\\GitHub\\Proyecto.NET\\CentroEventos\\CentroEventos.Repositorios\\CentroEventos.Repositorios.csproj",
       "packagesPath": "C:\\Users\\Dylan\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Dylan\\Desktop\\Proyecto\\CentroEventos\\CentroEventos.Repositorios\\obj\\",
+      "outputPath": "C:\\Users\\Dylan\\Documents\\GitHub\\Proyecto.NET\\CentroEventos\\CentroEventos.Repositorios\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Dylan\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -51,8 +51,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\Dylan\\Desktop\\Proyecto\\CentroEventos\\CentroEventos.Aplicacion\\CentroEventos.Aplicacion.csproj": {
-              "projectPath": "C:\\Users\\Dylan\\Desktop\\Proyecto\\CentroEventos\\CentroEventos.Aplicacion\\CentroEventos.Aplicacion.csproj"
+            "C:\\Users\\Dylan\\Documents\\GitHub\\Proyecto.NET\\CentroEventos\\CentroEventos.Aplicacion\\CentroEventos.Aplicacion.csproj": {
+              "projectPath": "C:\\Users\\Dylan\\Documents\\GitHub\\Proyecto.NET\\CentroEventos\\CentroEventos.Aplicacion\\CentroEventos.Aplicacion.csproj"
             }
           }
         }

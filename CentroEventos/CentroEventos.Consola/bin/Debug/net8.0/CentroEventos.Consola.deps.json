@@ -24,6 +24,9 @@
         }
       },
       "CentroEventos.Repositorios/1.0.0": {
+        "dependencies": {
+          "CentroEventos.Aplicacion": "1.0.0"
+        },
         "runtime": {
           "CentroEventos.Repositorios.dll": {
             "assemblyVersion": "1.0.0",
