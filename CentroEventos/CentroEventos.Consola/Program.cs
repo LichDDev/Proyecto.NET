@@ -1,2 +1,2 @@
 ﻿
-Console.ReadKey();
+Console.WriteLine("hola hdp");
