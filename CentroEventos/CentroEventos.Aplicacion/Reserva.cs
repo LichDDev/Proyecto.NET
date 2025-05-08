@@ -3,9 +3,9 @@ namespace CentroEventos.Aplicacion;
 
 public class Reserva
 {
-    public int ID{get;}
-    public int PersonalId{get;}
-    public int EventoDeportivoId{get;}
-    public DateTime FechaAltaReserva{get;}
-    public Estado EstadoAsistencia{get;}
+    public int ID{get;set;}
+    public int PersonalId{get;set;}
+    public int EventoDeportivoId{get;set;}
+    public DateTime FechaAltaReserva{get;set;}
+    public Estado EstadoAsistencia{get;set;}
 }
