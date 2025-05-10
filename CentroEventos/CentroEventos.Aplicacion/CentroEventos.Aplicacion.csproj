@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="UseCase\EventoDeportivo\" />
+    <Folder Include="UseCase\Reserva\" />
   </ItemGroup>
 
 </Project>
