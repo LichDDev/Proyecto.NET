@@ -6,9 +6,9 @@ public interface IRepositorioPersona
 {
     void AgregarPersona(Persona p);
     void EliminarPersona(int id);
-    void ModificarPersona(Persona p);
+    void ModificarPersona(int id,Persona p);
     List<Persona> ListarPersonas();
     bool ExisteId(int id);
-    bool ExisteDNI(int dni);
+    bool ExisteDNI(string dni);
     bool ExisteEmail(string email);
 }

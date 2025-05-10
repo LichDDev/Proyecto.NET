@@ -13,8 +13,9 @@ public class ValidacionPersona
         if(string.IsNullOrWhiteSpace(persona.Email)) message+= "El Email de la persona esta ausente\n";
         if(message!="")throw new ValidacionException(message);
         message="";
-        if(repo.ExisteDNI(int.Parse(persona.DNI)))message+= "Ya existe una persona con ese DNI\n";  //Este posible null reference es imposible porque lanzaría la tercera excepción
-        if(repo.ExisteEmail(persona.Email))message+= "Ya existe una persona con ese Email\n";       //Este igual
+
+        if(persona.DNI != null && repo.ExisteDNI(persona.DNI))message+= "Ya existe una persona con ese DNI\n";  //Este posible null reference es imposible porque lanzaría la tercera excepción
+        if(persona.Email != null&&repo.ExisteEmail(persona.Email))message+= "Ya existe una persona con ese Email\n";       //Este igual
         if(message!="")throw new DuplicadoException(message);
     }
 }
