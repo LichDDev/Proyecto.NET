@@ -4,7 +4,7 @@ namespace CentroEventos.Aplicacion;
 
 public class ValidacionReserva
 {
-    public static void Validar(Reserva reserva,IRepositorioPersona repoPer,IRepositorioEventoDeportivo repoDep,IRepositorioReserva repoRes)
+    public void Validar(Reserva reserva,IRepositorioPersona repoPer,IRepositorioEventoDeportivo repoDep,IRepositorioReserva repoRes)
     {
         string message="";
         if(!repoPer.ExisteId(reserva.PersonaId))message+="No existe una persona con esa ID\n";
