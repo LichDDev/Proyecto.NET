@@ -2,9 +2,9 @@ using System;
 
 namespace CentroEventos.Aplicacion;
 
-public class ValidacionPersona
+public class ValidacionPersona (IRepositorioPersona repo)
 {
-    public void Validar(Persona persona,IRepositorioPersona repo)
+    public void Validar(Persona persona)
     {
         string message="";
         if(string.IsNullOrWhiteSpace(persona.Nombre)) message+= "El nombre de la persona esta ausente\n";

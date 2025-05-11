@@ -2,9 +2,9 @@ using System;
 
 namespace CentroEventos.Aplicacion;
 
-public class ValidacionEventoDeportivo
+public class ValidacionEventoDeportivo(IRepositorioPersona repo)
 {
-    public void Validar(EventoDeportivo evento,IRepositorioPersona repo)
+    public void Validar(EventoDeportivo evento)
     {
         string message="";
         if(string.IsNullOrWhiteSpace(evento.Nombre)) message+= "El nombre del evento esta ausente\n";
