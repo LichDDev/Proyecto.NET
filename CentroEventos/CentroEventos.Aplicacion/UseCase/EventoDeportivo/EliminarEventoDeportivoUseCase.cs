@@ -2,7 +2,12 @@ using System;
 
 namespace CentroEventos.Aplicacion;
 
-public class EliminarEventoDeportivoUseCase(IRepositorioEventoDeportivo repEve)
+public class EliminarEventoDeportivoUseCase(IRepositorioEventoDeportivo repEve,ServicioAutorizacionProvisorio s)
 {
-    public void Ejecutar(int id) =>repEve.EliminarEventoDeportivo(id);
+    public void Ejecutar(int id, int idUsuario) {
+        if(!s.PoseeElPermiso(idUsuario,Permiso.EventoBaja)){
+            throw new FalloAutorizacionException("no posee permisos para realizar esta operacion");
+        }
+        repEve.EliminarEventoDeportivo(id);
+    }
 }

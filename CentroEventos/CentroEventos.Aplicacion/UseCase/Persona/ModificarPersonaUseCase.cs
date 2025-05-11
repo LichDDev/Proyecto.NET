@@ -9,7 +9,7 @@ public class ModificarPersonaUseCase (IRepositorioPersona repPer,ValidacionPerso
             throw new NullReferenceException("entidad = null");
         }
         
-        v.Validar(p,repPer);
+        v.Validar(p);
         repPer.ModificarPersona(id,p);
     }
 }
