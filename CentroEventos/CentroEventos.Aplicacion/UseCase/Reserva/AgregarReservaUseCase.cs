@@ -2,7 +2,7 @@ using System;
 
 namespace CentroEventos.Aplicacion;
 
-public class AgregarReservaUseCase(IRepositorioReserva repoRes,ServicioAutorizacionProvisorio s,ValidacionReserva v)
+public class AgregarReservaUseCase(IRepositorioReserva repoRes,IServicioAutorizacion s,ValidacionReserva v)
 {
     public void Ejecutar(Reserva r,int IdUsuario){
         if(!s.PoseeElPermiso(IdUsuario,Permiso.ReservaAlta)){

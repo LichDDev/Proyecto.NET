@@ -2,7 +2,7 @@ using System;
 
 namespace CentroEventos.Aplicacion;
 
-public class AgregarEventoDeportivoUseCase(IRepositorioEventoDeportivo repoEve,ServicioAutorizacionProvisorio s, ValidacionEventoDeportivo v)
+public class AgregarEventoDeportivoUseCase(IRepositorioEventoDeportivo repoEve,IServicioAutorizacion s, ValidacionEventoDeportivo v)
 {
     public void Ejecutar(EventoDeportivo e,int idUsuario){
         if(!s.PoseeElPermiso(idUsuario,Permiso.EventoAlta)){

@@ -2,7 +2,7 @@ using System;
 
 namespace CentroEventos.Aplicacion;
 
-public class EliminarEventoDeportivoUseCase(IRepositorioEventoDeportivo repEve,ServicioAutorizacionProvisorio s)
+public class EliminarEventoDeportivoUseCase(IRepositorioEventoDeportivo repEve,IServicioAutorizacion s)
 {
     public void Ejecutar(int id, int idUsuario) {
         if(!s.PoseeElPermiso(idUsuario,Permiso.EventoBaja)){
