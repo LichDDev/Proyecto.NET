@@ -5,28 +5,15 @@ namespace CentroEventos.Repositorios;
 
 public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
 {
-    private int _ultimoEliminado;
+    private int _finalEliminado;
     readonly string _eventosPath = "Eventos.txt";
     public void AgregarEventoDeportivo(EventoDeportivo e)
     {
-        //instancia un streamReader con el path de la entidad(Persona, evento o reserva)
-        using var sr = new StreamReader(_eventosPath);
-
-        //lee la ultima linea del archivo (supone que los datos esta estructurados en una Linea)
-        string? linea = "";
-        while (!sr.EndOfStream)
-        {
-            linea = sr.ReadLine();
-        }
-
-        //recibe la ultima linea y lo separa por ':' para poder tomar el id que se encuentra primero
-        //en caso de estar vacio se toma el id 0 
-        string[]? entidad = (linea != null) ? linea.Split(':') : "0:SinDatos".Split(':');
-
-        //toma el id y lo incrementa
-        int id = int.Parse(entidad[0]);
+        var lista = ListarEventosDeportivos();
+        int id = (lista.Count > 0) ? lista[lista.Count-1].ID : 0;
         id++;
-        if (id == _ultimoEliminado) id++;
+        if (id <= _finalEliminado)
+            id = _finalEliminado +1;
         e.ID = id;
 
         using var sw = new StreamWriter(_eventosPath,true);
@@ -34,16 +21,24 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
     }
     public void EliminarEventoDeportivo(int idEvento)
     {
-        _ultimoEliminado = idEvento;
+        bool encontrado = false;
         using var sw = new StreamWriter(_eventosPath, false);
         var lista = ListarEventosDeportivos();
-
-        for (int i = 0; i <= lista.Count; i++)
+        if (idEvento > _finalEliminado)
+        {
+            _finalEliminado = idEvento;
+        } 
+        for (int i = 0; i < lista.Count; i++)
         {
             if (lista[i].ID == idEvento)
             {
                 lista.RemoveAt(i);
+                encontrado = true;
             }
+        }
+        if (!encontrado)
+        {
+            throw new EntidadNotFoundException("Entidad no encontrada");
         }
         foreach (var e in lista)
         {
@@ -54,7 +49,7 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
     {
         using var sw = new StreamWriter(_eventosPath,false);
         var lista = ListarEventosDeportivos();
-        for(int i = 0; i<= lista.Count; i++)
+        for(int i = 0; i< lista.Count; i++)
         {
             if (lista[i].ID == e.ID){
                 lista[i] = e;
@@ -79,7 +74,11 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
     }
     public bool ExisteId(int idEvento)
     {
-        return true;
+        bool existe = false;
+
+        
+
+        return existe;
     }
     public int CupoMaximoPorEvento(int idEvento)
     {
