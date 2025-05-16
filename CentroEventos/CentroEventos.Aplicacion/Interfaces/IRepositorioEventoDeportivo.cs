@@ -5,9 +5,9 @@ namespace CentroEventos.Aplicacion;
 public interface IRepositorioEventoDeportivo
 {
     void AgregarEventoDeportivo(EventoDeportivo e);
-    void EliminarEventoDeportivo(int id);
-    void ModificarEventoDeportivo(int id,EventoDeportivo p);
+    void EliminarEventoDeportivo(int eventoID);
+    void ModificarEventoDeportivo(EventoDeportivo evento);
     List<EventoDeportivo> ListarEventosDeportivos();
-    bool ExisteId(int eventoId);
-    int CupoMaximoPorEvento(int eventoId);
+    bool ExisteId(int eventoID);
+    int CupoMaximoPorEvento(int eventoID);
 }
