@@ -5,15 +5,15 @@ namespace CentroEventos.Repositorios;
 
 public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
 {
-    private int _finalEliminado;
+    private int _idFinal;
     readonly string _eventosPath = "Eventos.txt";
     public void AgregarEventoDeportivo(EventoDeportivo e)
     {
         var lista = ListarEventosDeportivos();
         int id = (lista.Count > 0) ? lista[lista.Count-1].ID : 0;
         id++;
-        if (id <= _finalEliminado)
-            id = _finalEliminado +1;
+        if (id <= _idFinal)
+            id = _idFinal +1;
         e.ID = id;
 
         using var sw = new StreamWriter(_eventosPath,true);
@@ -24,9 +24,9 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
         bool encontrado = false;
         using var sw = new StreamWriter(_eventosPath, false);
         var lista = ListarEventosDeportivos();
-        if (idEvento > _finalEliminado)
+        if (idEvento > _idFinal)
         {
-            _finalEliminado = idEvento;
+            _idFinal = idEvento;
         } 
         for (int i = 0; i < lista.Count; i++)
         {
