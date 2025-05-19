@@ -3,10 +3,30 @@ using CentroEventos.Aplicacion;
 
 namespace CentroEventos.Repositorios;
 
-public class RespositorioReserva : IRepositorioReserva
+public class RespositorioReserva(string Path,string idPath) : IRepositorioReserva
 {
-    readonly string _reservasPath = "Reservas.txt";
-    int _ultimoEliminado;
+    private string _idPath = @idPath;
+    readonly string _reservasPath = @Path;
+    private int ObtenerSiguienteID()
+    {
+        int ultimoID = 0;
+        if (File.Exists(_idPath))
+        {
+            var sr = new StreamReader(_idPath);
+            string contenido = sr.ReadToEnd();
+            ultimoID = contenido != "" ? int.Parse(contenido) : 0;
+            sr.Close();
+        }
+        else
+        {
+            File.CreateText(_idPath);
+            ultimoID = 0;
+        }
+        int nuevoID = ultimoID + 1;
+        using var sw = new StreamWriter(_idPath,false);
+        sw.WriteLine(nuevoID);
+        return nuevoID;
+    }
     public void AgregarReserva(Reserva r)
     {
         //Se asegura que el archivo exista antes de leerlo
@@ -15,16 +35,7 @@ public class RespositorioReserva : IRepositorioReserva
             using var aux = File.CreateText(_reservasPath);
             aux.Close();
         }
-        //Se instancia el StreamReader con el archivo _reservasPath y se lee hasta la última linea
-        using var sr = new StreamReader(_reservasPath);
-        string? linea = "";
-        while (!sr.EndOfStream)
-            linea = sr.ReadLine();
-        //Se lee la reserva y se asigna la ID a la siguiente reserva
-        string[]? reserva = (linea != null) ? linea.Split(':') : "0".Split(':');
-        int id = int.Parse(reserva[0]) + 1;
-        if (id == _ultimoEliminado) id++;
-        r.ID = id;
+        r.ID = ObtenerSiguienteID();
         //Se vuelve a escribir el archivo actualizado
         using var sw = new StreamWriter(_reservasPath, true);
         sw.WriteLine($"{r.ID}:{r.PersonaId}:{r.EventoDeportivoId}:{r.FechaAltaReserva}:{r.EstadoAsistencia}");
@@ -37,7 +48,6 @@ public class RespositorioReserva : IRepositorioReserva
         if (i != -1)
         {
             lista.RemoveAt(i);
-            _ultimoEliminado = id;
             //Se removió la reserva y se instancia un StreamWriter para volver a escribir el archivo
             using var sw = new StreamWriter(_reservasPath);
             foreach (Reserva r in lista)
@@ -51,6 +61,7 @@ public class RespositorioReserva : IRepositorioReserva
         int i = lista.FindIndex(r => r.ID == id);
         if (i != -1)
         {
+            r.ID = id;
             lista[i] = r;
             //Se modificó la reserva y se instancia un StreamWriter para volver a escribir el archivo
             using var sw = new StreamWriter(_reservasPath);
