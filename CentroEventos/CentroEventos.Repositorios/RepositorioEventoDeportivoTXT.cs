@@ -38,7 +38,7 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
         using var sw = new StreamWriter(_eventosPath, false);
         var lista = ListarEventosDeportivos();
 
-        for (int i = 0; i <= lista.Count; i++)
+        for (int i = 0; i < lista.Count; i++)
         {
             if (lista[i].ID == idEvento)
             {
@@ -54,7 +54,7 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
     {
         using var sw = new StreamWriter(_eventosPath,false);
         var lista = ListarEventosDeportivos();
-        for(int i = 0; i<= lista.Count; i++)
+        for(int i = 0; i< lista.Count; i++)
         {
             if (lista[i].ID == e.ID){
                 lista[i] = e;
@@ -79,11 +79,19 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
     }
     public bool ExisteId(int idEvento)
     {
-        return true;
+        List<EventoDeportivo>lista=ListarEventosDeportivos();
+        //Se busca en la lista un evento deportivo con el mismo ID que el parametro
+        int i=lista.FindIndex(e=>e.ID==idEvento);
+        return(i!=-1);
     }
     public int CupoMaximoPorEvento(int idEvento)
     {
-        return 0;
+        List<EventoDeportivo> lista = ListarEventosDeportivos();
+        int i = lista.FindIndex(e => e.ID == idEvento);
+        if (i != -1)
+            return lista[i].CupoMaximo;
+        else
+            throw new EntidadNotFoundException("No existe un evento con ese ID");
     }
     
 }
