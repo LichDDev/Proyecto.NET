@@ -13,9 +13,8 @@ public class ValidacionEventoDeportivo(IRepositorioPersona repo)
         if (evento.CupoMaximo <= 0) message += "El cupo máximo debe ser mayor que cero\n";
         if (evento.DuracionHoras <= 0) message += "La duración debe ser mayor que cero\n";
         //Si la persona responsable existe, retorna si los datos son correctos, y si no existe lanza la EntidadNotFoundExeption
-        if (repo.ExisteId(evento.ResponsableId))
-            return string.IsNullOrEmpty(message);
-        else
-            throw new EntidadNotFoundException("La persona responsable no existe");
+        if (!repo.ExisteId(evento.ResponsableId)) throw new EntidadNotFoundException("La persona responsable no existe");
+        if (evento.FechaHoraInicio < DateTime.Now) throw new OperacionInvalidaException("La fecha de inicio no puede ser en el pasado");
+        return string.IsNullOrEmpty(message);
     }
 }
