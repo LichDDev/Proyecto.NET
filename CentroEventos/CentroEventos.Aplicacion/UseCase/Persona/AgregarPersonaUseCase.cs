@@ -8,7 +8,8 @@ public class AgregarPersonaUseCase (IRepositorioPersona repPer,ValidacionPersona
         if(p == null){
             throw new NullReferenceException("entidad = null");
         }
-        v.Validar(p);
+        if (!v.Validar(p, out string message))
+            throw new ValidacionException(message);
         repPer.AgregarPersona(p);
     }
 }

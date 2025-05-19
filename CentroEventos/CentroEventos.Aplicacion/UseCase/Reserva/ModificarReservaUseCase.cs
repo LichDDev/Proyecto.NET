@@ -11,7 +11,8 @@ public class ModificarReservaUseCase (IRepositorioReserva repoRes,IServicioAutor
         if(r == null){
             throw new NullReferenceException("Reserva");
         }
-        v.Validar(r);
+        if (!v.Validar(r, out string message))
+            throw new ValidacionException(message);
         repoRes.ModificarReserva(id,r);
     }
 }

@@ -8,8 +8,8 @@ public class ModificarPersonaUseCase (IRepositorioPersona repPer,ValidacionPerso
         if(p == null){
             throw new NullReferenceException("entidad = null");
         }
-        
-        v.Validar(p);
+        if (!v.Validar(p, out string message))
+            throw new ValidacionException(message);
         repPer.ModificarPersona(id,p);
     }
 }

@@ -11,7 +11,8 @@ public class ModificarEventoDeportivoUseCase(IRepositorioEventoDeportivo repoEve
         if(e == null){
             throw new NullReferenceException("EventoDeportivo");
         }
-        v.Validar(e);
+        if (!v.Validar(e, out string mensaje))
+            throw new ValidacionException(mensaje);
         repoEve.ModificarEventoDeportivo(e);
     }
 }

@@ -8,7 +8,8 @@ public class AgregarEventoDeportivoUseCase(IRepositorioEventoDeportivo repoEve,I
         if(!s.PoseeElPermiso(idUsuario,Permiso.EventoAlta)){
             throw new FalloAutorizacionException("no posee permisos para realizar esta operacion");
         }
-        v.Validar(e);
+        if (!v.Validar(e, out string message))
+            throw new ValidacionException(message);
         repoEve.AgregarEventoDeportivo(e);
     }
 }

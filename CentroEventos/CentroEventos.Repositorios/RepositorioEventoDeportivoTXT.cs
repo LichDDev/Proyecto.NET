@@ -74,15 +74,19 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
     }
     public bool ExisteId(int idEvento)
     {
-        bool existe = false;
-
-        
-
-        return existe;
+        List<EventoDeportivo>lista=ListarEventosDeportivos();
+        //Se busca en la lista un evento deportivo con el mismo ID que el parametro
+        int i=lista.FindIndex(e=>e.ID==idEvento);
+        return(i!=-1);
     }
     public int CupoMaximoPorEvento(int idEvento)
     {
-        return 0;
+        List<EventoDeportivo> lista = ListarEventosDeportivos();
+        int i = lista.FindIndex(e => e.ID == idEvento);
+        if (i != -1)
+            return lista[i].CupoMaximo;
+        else
+            throw new EntidadNotFoundException("No existe un evento con ese ID");
     }
     
 }
