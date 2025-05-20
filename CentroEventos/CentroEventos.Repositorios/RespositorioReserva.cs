@@ -16,18 +16,20 @@ public class RespositorioReserva : IRepositorioReserva
             aux.Close();
         }
         //Se instancia el StreamReader con el archivo _reservasPath y se lee hasta la última linea
-        using var sr = new StreamReader(_reservasPath);
         string? linea = "";
-        while (!sr.EndOfStream)
-            linea = sr.ReadLine();
+        using (var sr = new StreamReader(_reservasPath))
+        {
+            while (!sr.EndOfStream)
+                linea = sr.ReadLine();
+        }
         //Se lee la reserva y se asigna la ID a la siguiente reserva
-        string[]? reserva = (linea != null) ? linea.Split(':') : "0".Split(':');
+        string[] reserva = (!string.IsNullOrWhiteSpace(linea)) ? linea.Split(',') : new string[] { "0" };
         int id = int.Parse(reserva[0]) + 1;
         if (id == _ultimoEliminado) id++;
         r.ID = id;
         //Se vuelve a escribir el archivo actualizado
         using var sw = new StreamWriter(_reservasPath, true);
-        sw.WriteLine($"{r.ID}:{r.PersonaId}:{r.EventoDeportivoId}:{r.FechaAltaReserva}:{r.EstadoAsistencia}");
+        sw.WriteLine($"{r.ID},{r.PersonaId},{r.EventoDeportivoId},{r.FechaAltaReserva},{r.EstadoAsistencia}");
     }
     public void EliminarReserva(int id)
     {
@@ -41,7 +43,7 @@ public class RespositorioReserva : IRepositorioReserva
             //Se removió la reserva y se instancia un StreamWriter para volver a escribir el archivo
             using var sw = new StreamWriter(_reservasPath);
             foreach (Reserva r in lista)
-                sw.WriteLine($"{r.ID}:{r.PersonaId}:{r.EventoDeportivoId}:{r.FechaAltaReserva}:{r.EstadoAsistencia}");
+                sw.WriteLine($"{r.ID},{r.PersonaId},{r.EventoDeportivoId},{r.FechaAltaReserva},{r.EstadoAsistencia}");
         }
     }
     public void ModificarReserva(int id, Reserva r)
@@ -55,18 +57,21 @@ public class RespositorioReserva : IRepositorioReserva
             //Se modificó la reserva y se instancia un StreamWriter para volver a escribir el archivo
             using var sw = new StreamWriter(_reservasPath);
             foreach (Reserva res in lista)
-                sw.WriteLine($"{res.ID}:{res.PersonaId}:{res.EventoDeportivoId}:{res.FechaAltaReserva}:{res.EstadoAsistencia}");
+                sw.WriteLine($"{res.ID},{res.PersonaId},{res.EventoDeportivoId},{res.FechaAltaReserva},{res.EstadoAsistencia}");
         }
     }
     public List<Reserva> ListarReservas()
     {
         List<Reserva> lista = new List<Reserva>();
+        //Si no existe el archivo, develve una lista vacia
+        if (!File.Exists(_reservasPath))
+            return lista;
         //Se instancia un StreamReader con el archivo reservasPath y se agregan las reservas a un vector
         using var sr = new StreamReader(_reservasPath);
         while (!sr.EndOfStream)
         {
             string? linea = sr.ReadLine();
-            string[]? datos = linea?.Split(':');
+            string[]? datos = linea?.Split(',');
             //Si hay datos se añade la reserva a la lista para retornarla cuando se termine el archivo
             if (datos != null)
                 lista.Add(new Reserva() { ID = int.Parse(datos[0]), PersonaId = int.Parse(datos[1]), EventoDeportivoId = int.Parse(datos[2]), FechaAltaReserva = DateTime.Parse(datos[3]), EstadoAsistencia = Enum.Parse<Estado>(datos[4]) });

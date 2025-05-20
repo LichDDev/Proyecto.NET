@@ -9,19 +9,25 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
     readonly string _eventosPath = "Eventos.txt";
     public void AgregarEventoDeportivo(EventoDeportivo e)
     {
-        //instancia un streamReader con el path de la entidad(Persona, evento o reserva)
-        using var sr = new StreamReader(_eventosPath);
-
-        //lee la ultima linea del archivo (supone que los datos esta estructurados en una Linea)
-        string? linea = "";
-        while (!sr.EndOfStream)
+        //Se asegura que el archivo exista antes de leerlo
+        if (!File.Exists(_eventosPath))
         {
-            linea = sr.ReadLine();
+            using var aux = File.CreateText(_eventosPath);
+            aux.Close();
         }
-
+        string? linea = "";
+        //instancia un streamReader con el path de la entidad(Persona, evento o reserva)
+        using (var sr = new StreamReader(_eventosPath))
+        {
+            //lee la ultima linea del archivo (supone que los datos esta estructurados en una Linea)
+            while (!sr.EndOfStream)
+            {
+            linea = sr.ReadLine();
+            }
+        }
         //recibe la ultima linea y lo separa por ':' para poder tomar el id que se encuentra primero
         //en caso de estar vacio se toma el id 0 
-        string[]? entidad = (linea != null) ? linea.Split(':') : "0:SinDatos".Split(':');
+        string[] entidad = (!string.IsNullOrWhiteSpace(linea)) ? linea.Split(',') : new string[] { "0" };
 
         //toma el id y lo incrementa
         int id = int.Parse(entidad[0]);
@@ -30,7 +36,7 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
         e.ID = id;
 
         using var sw = new StreamWriter(_eventosPath,true);
-        sw.WriteLine($"{e.ID}:{e.Nombre}:{e.Descripcion}:{e.FechaHoraInicio}:{e.DuracionHoras}:{e.CupoMaximo}:{e.ResponsableId}");
+        sw.WriteLine($"{e.ID},{e.Nombre},{e.Descripcion},{e.FechaHoraInicio},{e.DuracionHoras},{e.CupoMaximo},{e.ResponsableId}");
     }
     public void EliminarEventoDeportivo(int idEvento)
     {
@@ -47,7 +53,7 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
         }
         foreach (var e in lista)
         {
-            sw.WriteLine($"{e.ID}:{e.Nombre}:{e.Descripcion}:{e.FechaHoraInicio}:{e.DuracionHoras}:{e.CupoMaximo}:{e.ResponsableId}");
+            sw.WriteLine($"{e.ID},{e.Nombre},{e.Descripcion},{e.FechaHoraInicio},{e.DuracionHoras},{e.CupoMaximo},{e.ResponsableId}");
         }        
     }
     public void ModificarEventoDeportivo(EventoDeportivo e)
@@ -59,20 +65,23 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
             if (lista[i].ID == e.ID){
                 lista[i] = e;
             }
-            sw.WriteLine($"{e.ID}:{e.Nombre}:{e.Descripcion}:{e.FechaHoraInicio}:{e.DuracionHoras}:{e.CupoMaximo}:{e.ResponsableId}");
+            sw.WriteLine($"{e.ID},{e.Nombre},{e.Descripcion},{e.FechaHoraInicio},{e.DuracionHoras},{e.CupoMaximo},{e.ResponsableId}");
         }  
     }
     public List<EventoDeportivo> ListarEventosDeportivos()
     {
         using var sr = new StreamReader(_eventosPath);
         var lista = new List<EventoDeportivo>();
+        //Si no existe el archivo, develve una lista vacia
+        if (!File.Exists(_eventosPath))
+            return lista;
         while (!sr.EndOfStream)
         {
             string? linea = sr.ReadLine();
-            string[]? datos = (linea == null)? null : linea.Split(':');
+            string[]? datos = (linea == null) ? null : linea.Split(',');
             if (datos != null)
             {
-                lista.Add(new EventoDeportivo() { ID = int.Parse(datos[0]), Nombre = datos[1], Descripcion = datos[2], FechaHoraInicio = DateTime.Parse(datos[3]), DuracionHoras = double.Parse(datos[4]), CupoMaximo = int.Parse(datos[5]), ResponsableId = int.Parse(datos[6]) });
+                lista.Add(new EventoDeportivo() { ID = int.Parse(datos[0]), Nombre = datos[1], Descripcion = datos[2], FechaHoraInicio = DateTime.ParseExact(datos[3], "d/M/yyyy H:mm:ss", null), DuracionHoras = double.Parse(datos[4]), CupoMaximo = int.Parse(datos[5]), ResponsableId = int.Parse(datos[6]) });
             }
         }
         return lista;

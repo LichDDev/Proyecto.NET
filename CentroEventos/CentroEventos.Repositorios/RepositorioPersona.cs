@@ -16,12 +16,14 @@ public class RepositorioPersona : IRepositorioPersona
             aux.Close();
         }
         //Se instancia el StreamReader con el archivo _personasPath y se lee hasta la última linea
-        using var sr = new StreamReader(_personasPath);
-        string?linea="";
-        while(!sr.EndOfStream)
-            linea=sr.ReadLine();
+        string? linea = "";
+        using (var sr = new StreamReader(_personasPath))
+        {
+            while (!sr.EndOfStream)
+                linea = sr.ReadLine();
+        }
         //Se lee la persona y se asigna la ID a la siguiente persona
-        string[]?persona=(linea!=null)?linea.Split(':'):"0".Split(':');
+        string[] persona = (!string.IsNullOrWhiteSpace(linea)) ? linea.Split(':') : new string[] { "0" };
         int id=int.Parse(persona[0])+1;
         if(id==_ultimoEliminado)id++;
         p.ID=id;
@@ -44,23 +46,26 @@ public class RepositorioPersona : IRepositorioPersona
                 sw.WriteLine($"{p.ID}:{p.DNI}:{p.Nombre}:{p.Apellido}:{p.Email}:{p.Telefono}");
         }
     }
-    public void ModificarPersona(int id,Persona p)
+    public void ModificarPersona(int id, Persona p)
     {
-        List<Persona> lista=ListarPersonas();
+        List<Persona> lista = ListarPersonas();
         //Se busca en la lista una persona con la misma ID que el parametro y se modifica si se encuentra
-        int i=lista.FindIndex(p=>p.ID==id);
-        if(i!=-1)
+        int i = lista.FindIndex(p => p.ID == id);
+        if (i != -1)
         {
-            lista[i]=p;
+            lista[i] = p;
             //Se modificó la persona y se instancia un StreamWriter para volver a escribir el archivo
             using var sw = new StreamWriter(_personasPath);
-            foreach(Persona per in lista)
+            foreach (Persona per in lista)
                 sw.WriteLine($"{per.ID}:{per.DNI}:{per.Nombre}:{per.Apellido}:{per.Email}:{per.Telefono}");
         }
     }
     public List<Persona> ListarPersonas()
     {
         List<Persona> lista=new List<Persona>();
+        //Si no existe el archivo, develve una lista vacia
+        if (!File.Exists(_personasPath))
+            return lista;
         //Se instancia un StreamReader con el archivo personasPath y se agregan las personas a un vector
         using var sr = new StreamReader(_personasPath);
         while(!sr.EndOfStream)
