@@ -5,6 +5,7 @@ namespace CentroEventos.Repositorios;
 
 public class RepositorioEventoDeportivo (string Path,string idPath) : IRepositorioEventoDeportivo
 {
+    //mejorable 
     readonly string _idPath = @idPath;
     readonly string _eventosPath = @Path;
 
