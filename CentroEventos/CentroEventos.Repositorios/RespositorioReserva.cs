@@ -31,7 +31,7 @@ public class RespositorioReserva : IRepositorioReserva
         using var sw = new StreamWriter(_reservasPath, true);
         sw.WriteLine($"{r.ID},{r.PersonaId},{r.EventoDeportivoId},{r.FechaAltaReserva},{r.EstadoAsistencia}");
     }
-    public void EliminarReserva(int id)
+    public bool EliminarReserva(int id)
     {
         List<Reserva> lista = ListarReservas();
         //Se busca en la lista una reserva con la misma ID que el parametro y la remueve si existe
@@ -44,21 +44,26 @@ public class RespositorioReserva : IRepositorioReserva
             using var sw = new StreamWriter(_reservasPath);
             foreach (Reserva r in lista)
                 sw.WriteLine($"{r.ID},{r.PersonaId},{r.EventoDeportivoId},{r.FechaAltaReserva},{r.EstadoAsistencia}");
+            return true;
         }
+        else return false;
     }
-    public void ModificarReserva(int id, Reserva r)
+    public bool ModificarReserva(int id, Reserva r)
     {
         List<Reserva> lista = ListarReservas();
         //Se busca en la lista una reserva con la misma ID que el parametro y se modifica si se encuentra
         int i = lista.FindIndex(r => r.ID == id);
         if (i != -1)
         {
+            r.ID = lista[i].ID;
             lista[i] = r;
             //Se modificó la reserva y se instancia un StreamWriter para volver a escribir el archivo
             using var sw = new StreamWriter(_reservasPath);
             foreach (Reserva res in lista)
                 sw.WriteLine($"{res.ID},{res.PersonaId},{res.EventoDeportivoId},{res.FechaAltaReserva},{res.EstadoAsistencia}");
+            return true;
         }
+        else return false;
     }
     public List<Reserva> ListarReservas()
     {

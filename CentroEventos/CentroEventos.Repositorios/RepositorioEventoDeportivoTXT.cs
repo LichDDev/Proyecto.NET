@@ -38,43 +38,48 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
         using var sw = new StreamWriter(_eventosPath,true);
         sw.WriteLine($"{e.ID},{e.Nombre},{e.Descripcion},{e.FechaHoraInicio},{e.DuracionHoras},{e.CupoMaximo},{e.ResponsableId}");
     }
-    public void EliminarEventoDeportivo(int idEvento)
+    public bool EliminarEventoDeportivo(int idEvento)
     {
         _ultimoEliminado = idEvento;
-        using var sw = new StreamWriter(_eventosPath, false);
+        bool aux = false;
         var lista = ListarEventosDeportivos();
-
         for (int i = 0; i < lista.Count; i++)
         {
             if (lista[i].ID == idEvento)
             {
                 lista.RemoveAt(i);
+                aux = true;
             }
         }
+        if (!aux) return aux;
+        using var sw = new StreamWriter(_eventosPath, false);
         foreach (var e in lista)
         {
             sw.WriteLine($"{e.ID},{e.Nombre},{e.Descripcion},{e.FechaHoraInicio},{e.DuracionHoras},{e.CupoMaximo},{e.ResponsableId}");
-        }        
+        }
+        return aux;        
     }
-    public void ModificarEventoDeportivo(EventoDeportivo e)
+    public void ModificarEventoDeportivo(int id,EventoDeportivo e)
     {
-        using var sw = new StreamWriter(_eventosPath,false);
         var lista = ListarEventosDeportivos();
-        for(int i = 0; i< lista.Count; i++)
+        using var sw = new StreamWriter(_eventosPath,false);
+        for (int i = 0; i < lista.Count; i++)
         {
-            if (lista[i].ID == e.ID){
+            if (lista[i].ID == id)
+            {
+                e.ID = id;
                 lista[i] = e;
             }
-            sw.WriteLine($"{e.ID},{e.Nombre},{e.Descripcion},{e.FechaHoraInicio},{e.DuracionHoras},{e.CupoMaximo},{e.ResponsableId}");
+            sw.WriteLine($"{lista[i].ID},{lista[i].Nombre},{lista[i].Descripcion},{lista[i].FechaHoraInicio},{lista[i].DuracionHoras},{lista[i].CupoMaximo},{lista[i].ResponsableId}");
         }  
     }
     public List<EventoDeportivo> ListarEventosDeportivos()
     {
-        using var sr = new StreamReader(_eventosPath);
         var lista = new List<EventoDeportivo>();
         //Si no existe el archivo, develve una lista vacia
         if (!File.Exists(_eventosPath))
             return lista;
+        using var sr = new StreamReader(_eventosPath);
         while (!sr.EndOfStream)
         {
             string? linea = sr.ReadLine();

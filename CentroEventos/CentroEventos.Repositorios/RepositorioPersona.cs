@@ -31,34 +31,39 @@ public class RepositorioPersona : IRepositorioPersona
         using var sw = new StreamWriter(_personasPath, true);
         sw.WriteLine($"{p.ID}:{p.DNI}:{p.Nombre}:{p.Apellido}:{p.Email}:{p.Telefono}");
     }
-    public void EliminarPersona(int id)
+    public bool EliminarPersona(int id)
     {
-        List<Persona> lista=ListarPersonas();
+        List<Persona> lista = ListarPersonas();
         //Se busca en la lista una persona con la misma ID que el parametro y la remueve si existe
-        int i=lista.FindIndex(p=>p.ID==id);
-        if(i!=-1)
+        int i = lista.FindIndex(p => p.ID == id);
+        if (i != -1)
         {
             lista.RemoveAt(i);
-            _ultimoEliminado=id;
+            _ultimoEliminado = id;
             //Se removió la persona y se instancia un StreamWriter para volver a escribir el archivo
             using var sw = new StreamWriter(_personasPath);
-            foreach(Persona p in lista)
+            foreach (Persona p in lista)
                 sw.WriteLine($"{p.ID}:{p.DNI}:{p.Nombre}:{p.Apellido}:{p.Email}:{p.Telefono}");
+            return true;
         }
+        else return false;
     }
-    public void ModificarPersona(int id, Persona p)
+    public bool ModificarPersona(int id, Persona p)
     {
         List<Persona> lista = ListarPersonas();
         //Se busca en la lista una persona con la misma ID que el parametro y se modifica si se encuentra
         int i = lista.FindIndex(p => p.ID == id);
         if (i != -1)
         {
+            p.ID = lista[i].ID;
             lista[i] = p;
             //Se modificó la persona y se instancia un StreamWriter para volver a escribir el archivo
             using var sw = new StreamWriter(_personasPath);
             foreach (Persona per in lista)
                 sw.WriteLine($"{per.ID}:{per.DNI}:{per.Nombre}:{per.Apellido}:{per.Email}:{per.Telefono}");
+            return true;
         }
+        else return false;
     }
     public List<Persona> ListarPersonas()
     {

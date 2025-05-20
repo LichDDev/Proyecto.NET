@@ -8,6 +8,6 @@ public class EliminarReservaUseCase (IRepositorioReserva repoRes,IServicioAutori
         if(!s.PoseeElPermiso(IdUsuario,Permiso.ReservaBaja )){
             throw new FalloAutorizacionException("no tiene Permisos");
         }
-        repoRes.EliminarReserva(id);
+        if(!repoRes.EliminarReserva(id))throw new EntidadNotFoundException("No se encontró una persona con esa ID");
     }
 }
