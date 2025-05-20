@@ -1,4 +1,4 @@
-﻿using CentroEventos.Aplicacion;
+using CentroEventos.Aplicacion;
 using CentroEventos.Repositorios;
 
 int idUsuario = 1;
