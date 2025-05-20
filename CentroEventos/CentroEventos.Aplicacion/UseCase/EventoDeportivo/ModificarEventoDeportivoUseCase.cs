@@ -12,6 +12,7 @@ public class ModificarEventoDeportivoUseCase(IRepositorioEventoDeportivo repoEve
             throw new NullReferenceException("EventoDeportivo");
         }
         if (!v.Validar(e, out string mensaje))
+        {
             throw new ValidacionException(mensaje);
         if (DateTime.Now > e.FechaHoraInicio.AddHours(e.DuracionHoras)) throw new OperacionInvalidaException("No se puede modificar un evento pasado");
         repoEve.ModificarEventoDeportivo(id,e);

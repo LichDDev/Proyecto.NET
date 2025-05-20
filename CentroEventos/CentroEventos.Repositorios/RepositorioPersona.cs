@@ -1,12 +1,34 @@
 using System;
+using System.Security.AccessControl;
 using CentroEventos.Aplicacion;
 
 namespace CentroEventos.Repositorios;
 
-public class RepositorioPersona : IRepositorioPersona
+public class RepositorioPersona(string Path,string idPath): IRepositorioPersona
 {   
-    int _ultimoEliminado;
-    readonly string _personasPath="Personas.txt";
+    readonly string _idPath = @idPath;
+    readonly string _personasPath = @Path;
+    private int ObtenerSiguienteID()
+    {
+        int ultimoID = 0;
+        if (File.Exists(_idPath))
+        {
+            var sr = new StreamReader(_idPath);
+            string contenido = sr.ReadToEnd();
+            ultimoID = contenido != "" ? int.Parse(contenido) : 0;
+            sr.Close();
+        }
+        else
+        {
+            File.CreateText(_idPath);
+            ultimoID = 0;
+        }
+        int nuevoID = ultimoID + 1;
+        using var sw = new StreamWriter(_idPath,false);
+        sw.WriteLine(nuevoID);
+        return nuevoID;
+    }
+
     public void AgregarPersona(Persona p)
     {
         //Se asegura que el archivo exista antes de leerlo
@@ -15,18 +37,7 @@ public class RepositorioPersona : IRepositorioPersona
             using var aux = File.CreateText(_personasPath);
             aux.Close();
         }
-        //Se instancia el StreamReader con el archivo _personasPath y se lee hasta la última linea
-        string? linea = "";
-        using (var sr = new StreamReader(_personasPath))
-        {
-            while (!sr.EndOfStream)
-                linea = sr.ReadLine();
-        }
-        //Se lee la persona y se asigna la ID a la siguiente persona
-        string[] persona = (!string.IsNullOrWhiteSpace(linea)) ? linea.Split(':') : new string[] { "0" };
-        int id=int.Parse(persona[0])+1;
-        if(id==_ultimoEliminado)id++;
-        p.ID=id;
+        p.ID = ObtenerSiguienteID();
         //Se vuelve a escribir el archivo actualizado
         using var sw = new StreamWriter(_personasPath, true);
         sw.WriteLine($"{p.ID}:{p.DNI}:{p.Nombre}:{p.Apellido}:{p.Email}:{p.Telefono}");
@@ -39,11 +50,12 @@ public class RepositorioPersona : IRepositorioPersona
         if (i != -1)
         {
             lista.RemoveAt(i);
-            _ultimoEliminado = id;
             //Se removió la persona y se instancia un StreamWriter para volver a escribir el archivo
-            using var sw = new StreamWriter(_personasPath);
-            foreach (Persona p in lista)
+            using var sw = new StreamWriter(_personasPath, false);
+            foreach (var p in lista)
+            {
                 sw.WriteLine($"{p.ID}:{p.DNI}:{p.Nombre}:{p.Apellido}:{p.Email}:{p.Telefono}");
+            }
             return true;
         }
         else return false;

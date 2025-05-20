@@ -2,11 +2,16 @@
 using CentroEventos.Repositorios;
 
 int idUsuario = 1;
-
+string personaPath = "Personas.txt";
+string idPersonasPath = "IDsPersonas.txt";
+string eventoPath = "Eventos.txt";
+string idEventosPath = "IDsEventos.txt";
+string reservasPath = "Reservas.txt";
+string idReservasPath="IDsReservas.txt";
 // Instanciar repositorios y validaciones
-var repoPersonas = new RepositorioPersona();
-var repoEventos = new RepositorioEventoDeportivoTXT();
-var repoReservas = new RespositorioReserva();
+var repoPersonas = new RepositorioPersona(personaPath,idPersonasPath);
+var repoEventos = new RepositorioEventoDeportivo(eventoPath,idEventosPath);
+var repoReservas = new RespositorioReserva(reservasPath,idReservasPath);
 var servicioAutorizacion = new ServicioAutorizacionProvisorio();
 
 var validacionPersona = new ValidacionPersona(repoPersonas);
@@ -27,9 +32,9 @@ var listarReservasUC = new ListarReservasUseCase(repoReservas);
 
 // Prueba: Agregar una persona
 var persona = new Persona { DNI = "4628554259", Nombre = "Nicolas", Apellido = "Aparicio", Email = "nico@55mail.com", Telefono = "2241" };
-agregarPersonaUC.Ejecutar(persona, idUsuario);
+agregarPersonaUC.Ejecutar(persona);
 persona.DNI = "7777777";persona.Email = "nico2@nose.com";
-agregarPersonaUC.Ejecutar(persona, idUsuario);
+agregarPersonaUC.Ejecutar(persona);
 // Prueba: Listar personas
 var personas = listarPersonasUC.Ejecutar();
 foreach (var p in personas)
