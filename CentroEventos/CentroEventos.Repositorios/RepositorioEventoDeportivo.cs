@@ -16,7 +16,7 @@ public class RepositorioEventoDeportivo (string Path,string idPath) : IRepositor
         {
             var sr = new StreamReader(_idPath);
             string contenido = sr.ReadToEnd();
-            ultimoID = contenido != "" ? int.Parse(contenido) : 0;
+            ultimoID = contenido != ""  ? int.Parse(contenido) : 0;
             sr.Close();
         }
         else
@@ -41,7 +41,7 @@ public class RepositorioEventoDeportivo (string Path,string idPath) : IRepositor
         e.ID = ObtenerSiguienteID();
 
         using var sw = new StreamWriter(_eventosPath, true);
-        sw.WriteLine($"{e.ID}:{e.Nombre}:{e.Descripcion}:{e.FechaHoraInicio}:{e.DuracionHoras}:{e.CupoMaximo}:{e.ResponsableId}");
+        sw.WriteLine($"{e.ID},{e.Nombre},{e.Descripcion},{e.FechaHoraInicio},{e.DuracionHoras},{e.CupoMaximo},{e.ResponsableId}");
     }
 
     public bool EliminarEventoDeportivo(int idEvento)
