@@ -3,10 +3,10 @@ using CentroEventos.Aplicacion;
 
 namespace CentroEventos.Repositorios;
 
-public class RespositorioReserva(string Path,string idPath) : IRepositorioReserva
+public class RespositorioReserva() : IRepositorioReserva
 {
-    private string _idPath = @idPath;
-    readonly string _reservasPath = @Path;
+    private string _idPath = @".\idReservas.txt";
+    readonly string _reservasPath = @".\Reservas.txt";
     private int ObtenerSiguienteID()
     {
         int ultimoID = 0;

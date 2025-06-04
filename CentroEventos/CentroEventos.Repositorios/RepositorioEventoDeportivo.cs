@@ -3,11 +3,11 @@ using CentroEventos.Aplicacion;
 
 namespace CentroEventos.Repositorios;
 
-public class RepositorioEventoDeportivo (string Path,string idPath) : IRepositorioEventoDeportivo
+public class RepositorioEventoDeportivo () : IRepositorioEventoDeportivo
 {
     //mejorable 
-    readonly string _idPath = @idPath;
-    readonly string _eventosPath = @Path;
+    readonly string _idPath = @".\idEventos.txt";
+    readonly string _eventosPath = @".\Eventos.txt";
 
     private int ObtenerSiguienteID()
     {

@@ -4,10 +4,10 @@ using CentroEventos.Aplicacion;
 
 namespace CentroEventos.Repositorios;
 
-public class RepositorioPersona(string Path,string idPath): IRepositorioPersona
+public class RepositorioPersona(): IRepositorioPersona
 {   
-    readonly string _idPath = @idPath;
-    readonly string _personasPath = @Path;
+    readonly string _idPath = @".\idPersonas.txt";
+    readonly string _personasPath = @".\Personas.txt";
     private int ObtenerSiguienteID()
     {
         int ultimoID = 0;

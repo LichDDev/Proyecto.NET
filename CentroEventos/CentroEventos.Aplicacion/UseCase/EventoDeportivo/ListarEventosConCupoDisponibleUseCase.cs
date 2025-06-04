@@ -15,7 +15,7 @@ public class ListarEventosConCupoDisponibleUseCase (IRepositorioEventoDeportivo 
             {
                 int reservas = repoRes.CantPersonasPorEvento(evento.ID);
                 int cupo = repoEve.CupoMaximoPorEvento(evento.ID);
-
+    
                 if (reservas < cupo)
                     listaEventosLibres.Add(evento);
             }
