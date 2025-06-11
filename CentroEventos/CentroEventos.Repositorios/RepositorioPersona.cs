@@ -13,14 +13,13 @@ public class RepositorioPersona(): IRepositorioPersona
         int ultimoID = 0;
         if (File.Exists(_idPath))
         {
-            var sr = new StreamReader(_idPath);
+            using var sr = new StreamReader(_idPath);
             string contenido = sr.ReadToEnd();
             ultimoID = contenido != "" ? int.Parse(contenido) : 0;
-            sr.Close();
         }
         else
         {
-            File.CreateText(_idPath);
+            using var aux = File.CreateText(_idPath);
             ultimoID = 0;
         }
         int nuevoID = ultimoID + 1;
@@ -35,7 +34,6 @@ public class RepositorioPersona(): IRepositorioPersona
         if (!File.Exists(_personasPath))
         {
             using var aux = File.CreateText(_personasPath);
-            aux.Close();
         }
         p.ID = ObtenerSiguienteID();
         //Se vuelve a escribir el archivo actualizado

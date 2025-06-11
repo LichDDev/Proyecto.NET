@@ -14,16 +14,16 @@ public class RepositorioEventoDeportivo () : IRepositorioEventoDeportivo
         int ultimoID = 0;
         if (File.Exists(_idPath))
         {
-            var sr = new StreamReader(_idPath);
+            using var sr = new StreamReader(_idPath);
             string contenido = sr.ReadToEnd();
             ultimoID = contenido != ""  ? int.Parse(contenido) : 0;
-            sr.Close();
         }
         else
         {
-            File.CreateText(_idPath);
+            using var aux = File.CreateText(_idPath);
             ultimoID = 0;
         }
+
         int nuevoID = ultimoID + 1;
         using var sw = new StreamWriter(_idPath,false);
         sw.WriteLine(nuevoID);
@@ -36,7 +36,6 @@ public class RepositorioEventoDeportivo () : IRepositorioEventoDeportivo
         if (!File.Exists(_eventosPath))
         {
             using var aux = File.CreateText(_eventosPath);
-            aux.Close();
         }
         e.ID = ObtenerSiguienteID();
 
@@ -54,7 +53,7 @@ public class RepositorioEventoDeportivo () : IRepositorioEventoDeportivo
             lista.RemoveAt(i);
             foreach (var e in lista)
             {
-                sw.WriteLine($"{lista[i].ID},{lista[i].Nombre},{lista[i].Descripcion},{lista[i].FechaHoraInicio},{lista[i].DuracionHoras},{lista[i].CupoMaximo},{lista[i].ResponsableId}");
+                sw.WriteLine($"{e.ID},{e.Nombre},{e.Descripcion},{e.FechaHoraInicio},{e.DuracionHoras},{e.CupoMaximo},{e.ResponsableId}");
             }
             return true;
         }
@@ -70,7 +69,7 @@ public class RepositorioEventoDeportivo () : IRepositorioEventoDeportivo
             e.ID = id;
             lista[i] = e;
             foreach (var eve in lista)
-                sw.WriteLine($"{lista[i].ID},{lista[i].Nombre},{lista[i].Descripcion},{lista[i].FechaHoraInicio},{lista[i].DuracionHoras},{lista[i].CupoMaximo},{lista[i].ResponsableId}");
+                sw.WriteLine($"{eve.ID},{eve.Nombre},{eve.Descripcion},{eve.FechaHoraInicio},{eve.DuracionHoras},{eve.CupoMaximo},{eve.ResponsableId}");
         }
     }
     public List<EventoDeportivo> ListarEventosDeportivos()
@@ -106,6 +105,5 @@ public class RepositorioEventoDeportivo () : IRepositorioEventoDeportivo
             return lista[i].CupoMaximo;
         else
             throw new EntidadNotFoundException("No existe un evento con ese ID");
-    }
-    
+    }   
 }
