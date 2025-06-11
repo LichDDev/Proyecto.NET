@@ -2,19 +2,41 @@ using System;
 
 namespace CentroEventos.Aplicacion;
 
-public class ValidacionEventoDeportivo(IRepositorioPersona repo)
+public class ValidacionEventoDeportivo(IRepositorioPersona repo) : IValidadorEventoDeportivo
 {
-    public bool Validar(EventoDeportivo evento, out string message)
+    public bool ValidarDatosVacios(EventoDeportivo evento, out string message)
     {
-        //Se valida que no haya ningún elemento faltante
         message = "";
         if (string.IsNullOrWhiteSpace(evento.Nombre)) message += "El nombre del evento esta ausente\n";
         if (string.IsNullOrWhiteSpace(evento.Descripcion)) message += "La descripción del evento esta ausente\n";
-        if (evento.CupoMaximo <= 0) message += "El cupo máximo debe ser mayor que cero\n";
-        if (evento.DuracionHoras <= 0) message += "La duración debe ser mayor que cero\n";
-        //Si la persona responsable existe, retorna si los datos son correctos, y si no existe lanza la EntidadNotFoundExeption
-        if (!repo.ExisteId(evento.ResponsableId)) throw new EntidadNotFoundException("La persona responsable no existe");
-        if (evento.FechaHoraInicio < DateTime.Now) throw new OperacionInvalidaException("La fecha de inicio no puede ser en el pasado");
-        return string.IsNullOrEmpty(message);
+        return (string.IsNullOrWhiteSpace(message));
+    }
+    public bool ValidarCupos(EventoDeportivo evento, out string message)
+    { 
+        message = "";
+        if (evento.CupoMaximo <= 0)
+            message += "El cupo máximo debe ser mayor que cero\n";
+        return (string.IsNullOrWhiteSpace(message));
+    }
+    public bool ValidarFechaDeInicio(EventoDeportivo evento,out string message)
+    {
+        message = "";
+        if (evento.FechaHoraInicio < DateTime.Now)
+            message += "La fecha de inicio no puede ser en el pasado";
+        return (string.IsNullOrWhiteSpace(message));
+    }
+    public bool ValidarDuracion(EventoDeportivo evento,out string message)
+    {
+        message = "";
+        if (evento.DuracionHoras <= 0)
+            message += "La duración debe ser mayor que cero\n";
+        return (string.IsNullOrWhiteSpace(message));
+    }
+    public bool ValidarResponsable(EventoDeportivo evento,out string message)
+    {
+        message = "";
+        if (!repo.ExisteId(evento.ResponsableId))
+            message += "La persona responsable no existe";
+        return (string.IsNullOrWhiteSpace(message));
     }
 }

@@ -2,17 +2,23 @@ using System;
 
 namespace CentroEventos.Aplicacion;
 
-public class AgregarReservaUseCase(IRepositorioReserva repoRes,IServicioAutorizacion s,ValidacionReserva v)
+public class AgregarReservaUseCase(IRepositorioReserva repoRes,IServicioAutorizacion s,IValidadorReserva v)
 {
     public void Ejecutar(Reserva r,int IdUsuario){
-        if(!s.PoseeElPermiso(IdUsuario,Permiso.ReservaAlta)){
+        string message;
+        if (!s.PoseeElPermiso(IdUsuario, Permiso.ReservaAlta))
+        {
             throw new FalloAutorizacionException("No tiene Permisos");
         }
-        if(r == null){
+        if(r == null)
             throw new NullReferenceException("Reserva");
-        }
-        if (!v.Validar(r, out string message))
-            throw new ValidacionException(message);
+        //validaciones
+        if (!v.ValidarEntidadesExistentes(r, out message))
+            throw new EntidadNotFoundException(message);
+        if (!v.ValidarReservaUnica(r, out message))
+            throw new DuplicadoException(message);
+        if (!v.ValidarCuposDisponibles(r, out message))
+            throw new CupoExcedidoException(message);
         repoRes.AgregarReserva(r);
     }
 }

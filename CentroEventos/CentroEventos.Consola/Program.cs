@@ -17,4 +17,3 @@ var listarEventosConCupos = new ListarReservasUseCase(repoReservas);
 var lista = listarEventosConCupos.Ejecutar();
 
 lista.ForEach(r => Console.WriteLine(r));
-
