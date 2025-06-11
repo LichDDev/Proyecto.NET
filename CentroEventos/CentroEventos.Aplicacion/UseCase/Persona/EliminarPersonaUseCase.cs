@@ -2,10 +2,12 @@ using System;
 
 namespace CentroEventos.Aplicacion;
 
-public class EliminarPersonaUseCase(IRepositorioPersona repPer,IRepositorioEventoDeportivo repoEve,IRepositorioReserva repoRes)
+public class EliminarPersonaUseCase(IRepositorioPersona repPer,IRepositorioEventoDeportivo repoEve,IRepositorioReserva repoRes,IServicioAutorizacion s)
 {
-    public void Ejecutar(int personaID)
+    public void Ejecutar(int personaID,int idUsuario)
     {
+        if(!s.PoseeElPermiso(idUsuario,Permiso.UsuarioBaja))
+            throw new FalloAutorizacionException("No tiene Permisos para realizar esta operacion");
         //No puede eliminarse si es responsable de algún evento
         if (repoEve.ListarEventosDeportivos().Any(e => e.ResponsableId == personaID))
             throw new OperacionInvalidaException("No se puede eliminar la persona porque es responsable de un evento");

@@ -2,11 +2,13 @@ using System;
 
 namespace CentroEventos.Aplicacion;
 
-public class AgregarPersonaUseCase (IRepositorioPersona repPer,IValidadorPersona v)
+public class AgregarPersonaUseCase (IRepositorioPersona repPer,IServicioAutorizacion s,IValidadorPersona v)
 {
-    public void Ejecutar(Persona p){ 
-        if(p == null)
-            throw new NullReferenceException("entidad = null");
+    public void Ejecutar(Persona p,int idUsuario){ 
+        if(!s.PoseeElPermiso(idUsuario,Permiso.UsuarioAlta))
+            throw new FalloAutorizacionException("No tiene Permisos para realizar esta operacion");
+        if (p == null)
+                throw new NullReferenceException("entidad = null");
         if (!v.ValidarDatosAusentes(p, out string message))
             throw new ValidacionException(message);
         if (!v.ValidarDNIUnico(p, out string mensaje))

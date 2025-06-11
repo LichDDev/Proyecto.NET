@@ -17,6 +17,7 @@ public class ModificarReservaUseCase (IRepositorioReserva repoRes,IServicioAutor
             throw new DuplicadoException(message);
         if (!v.ValidarCuposDisponibles(r, out message))
             throw new CupoExcedidoException(message);
-        if (!repoRes.ModificarReserva(id, r)) throw new EntidadNotFoundException("No se encontró una persona con esa ID");
+        if (!repoRes.ModificarReserva(id, r))
+            throw new EntidadNotFoundException("No se encontró una persona con esa ID");
     }
 }
