@@ -16,6 +16,7 @@ public class EliminarPersonaUseCase(IRepositorioPersona repPer,IRepositorioEvent
         if (repoRes.ListarReservas().Any(r => r.PersonaId == personaID))
             throw new OperacionInvalidaException("No se puede eliminar la persona porque tiene reservas asociadas");
 
-        if (!repPer.EliminarPersona(personaID))throw new EntidadNotFoundException("No se encontró una persona con esa ID");
+        if (!repPer.EliminarPersona(personaID))
+            throw new EntidadNotFoundException("No se encontró una persona con esa ID");
     }
 }

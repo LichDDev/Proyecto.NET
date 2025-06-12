@@ -3,9 +3,8 @@ using CentroEventos.Repositorios;
 
 
 
-// Instanciar repositorios y validaciones
-var repoPersonas = new RepositorioPersona();
-var repoEventos = new RepositorioEventoDeportivo();
-var repoReservas = new RespositorioReserva();
-var servicioAutorizacion = new ServicioAutorizacionProvisorio();
-
+using var context = new CentroEventosDB();
+if (context.Database.EnsureCreated())
+{
+    Console.WriteLine("Se creó base de datos");
+}
