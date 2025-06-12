@@ -1,109 +1,65 @@
 using System;
 using CentroEventos.Aplicacion;
+using Microsoft.VisualBasic;
 
 namespace CentroEventos.Repositorios;
 
 public class RepositorioEventoDeportivo () : IRepositorioEventoDeportivo
 {
-    //mejorable 
-    readonly string _idPath = @".\idEventos.txt";
-    readonly string _eventosPath = @".\Eventos.txt";
-
-    private int ObtenerSiguienteID()
+    public void AgregarEventoDeportivo(EventoDeportivo e)
     {
-        int ultimoID = 0;
-        if (File.Exists(_idPath))
+        using var db = new CentroEventosDB();
+        db.Add(e);
+        db.SaveChanges();
+    }
+    public bool EliminarEventoDeportivo(int idEvento)
+    {
+        using var db = new CentroEventosDB();
+        var elim = db.EventosDeportivos.Where(r => r.ID == idEvento).SingleOrDefault();
+        if (elim != null)
         {
-            using var sr = new StreamReader(_idPath);
-            string contenido = sr.ReadToEnd();
-            ultimoID = contenido != ""  ? int.Parse(contenido) : 0;
+            db.Remove(elim);
+            db.SaveChanges();
+            return true;
         }
         else
         {
-            using var aux = File.CreateText(_idPath);
-            ultimoID = 0;
+            db.SaveChanges();
+            return false;
         }
-
-        int nuevoID = ultimoID + 1;
-        using var sw = new StreamWriter(_idPath,false);
-        sw.WriteLine(nuevoID);
-        return nuevoID;
     }
-
-    public void AgregarEventoDeportivo(EventoDeportivo e)
+    public bool ModificarEventoDeportivo(int id, EventoDeportivo e)
     {
-        //Se asegura que el archivo exista antes de leerlo
-        if (!File.Exists(_eventosPath))
+        using var db = new CentroEventosDB();
+        var a = db.EventosDeportivos.Where(r => r.ID == id).SingleOrDefault();
+        if (a != null)
         {
-            using var aux = File.CreateText(_eventosPath);
-        }
-        e.ID = ObtenerSiguienteID();
-
-        using var sw = new StreamWriter(_eventosPath, true);
-        sw.WriteLine($"{e.ID},{e.Nombre},{e.Descripcion},{e.FechaHoraInicio},{e.DuracionHoras},{e.CupoMaximo},{e.ResponsableId}");
-    }
-
-    public bool EliminarEventoDeportivo(int idEvento)
-    {
-        var lista = ListarEventosDeportivos();
-        int i = lista.FindIndex(p => p.ID == idEvento);
-        if (i != -1)
-        {
-            using var sw = new StreamWriter(_eventosPath, false);
-            lista.RemoveAt(i);
-            foreach (var e in lista)
-            {
-                sw.WriteLine($"{e.ID},{e.Nombre},{e.Descripcion},{e.FechaHoraInicio},{e.DuracionHoras},{e.CupoMaximo},{e.ResponsableId}");
-            }
+            a.Nombre = e.Nombre;
+            a.CupoMaximo = e.CupoMaximo;
+            a.Descripcion = e.Descripcion;
+            a.FechaHoraInicio = e.FechaHoraInicio;
+            a.DuracionHoras = e.DuracionHoras;
+            a.ResponsableId = e.ResponsableId;
+            db.SaveChanges();
             return true;
         }
-        else return false;
-    }
-    public void ModificarEventoDeportivo(int id, EventoDeportivo e)
-    {
-        var lista = ListarEventosDeportivos();
-        int i = lista.FindIndex(r => r.ID == id);
-        if (i != -1)
-        {
-            using var sw = new StreamWriter(_eventosPath, false);
-            e.ID = id;
-            lista[i] = e;
-            foreach (var eve in lista)
-                sw.WriteLine($"{eve.ID},{eve.Nombre},{eve.Descripcion},{eve.FechaHoraInicio},{eve.DuracionHoras},{eve.CupoMaximo},{eve.ResponsableId}");
-        }
+        return false;
     }
     public List<EventoDeportivo> ListarEventosDeportivos()
     {
-        var lista = new List<EventoDeportivo>();
-        //Si no existe el archivo, develve una lista vacia
-        if (!File.Exists(_eventosPath))
-            return lista;
-        using var sr = new StreamReader(_eventosPath);
-        while (!sr.EndOfStream)
-        {
-            string? linea = sr.ReadLine();
-            string[]? datos = (linea == null) ? null : linea.Split(',');
-            if (datos != null)
-            {
-                lista.Add(new EventoDeportivo() { ID = int.Parse(datos[0]), Nombre = datos[1], Descripcion = datos[2], FechaHoraInicio = DateTime.ParseExact(datos[3], "d/M/yyyy H:mm:ss", null), DuracionHoras = double.Parse(datos[4]), CupoMaximo = int.Parse(datos[5]), ResponsableId = int.Parse(datos[6]) });
-            }
-        }
-        return lista;
+        using var db = new CentroEventosDB();
+        return db.EventosDeportivos.ToList();
     }
     public bool ExisteId(int idEvento)
     {
-        List<EventoDeportivo>lista=ListarEventosDeportivos();
-        //Se busca en la lista un evento deportivo con el mismo ID que el parametro
-        int i=lista.FindIndex(e=>e.ID==idEvento);
-        return(i!=-1);
+        using var db = new CentroEventosDB();
+        var a = db.EventosDeportivos.Where(r=> r.ID == idEvento).SingleOrDefault();
+        return(a!=null);
     }
     public int CupoMaximoPorEvento(int idEvento)
     {
-        List<EventoDeportivo> lista = ListarEventosDeportivos();
-        int i = lista.FindIndex(e => e.ID == idEvento);
-        if (i != -1)
-            return lista[i].CupoMaximo;
-        else
-            throw new EntidadNotFoundException("No existe un evento con ese ID");
+        using var db = new CentroEventosDB();
+        var a = db.EventosDeportivos.Where(r=> r.ID == idEvento).SingleOrDefault();
+        return a!= null ? a.CupoMaximo : 0;
     }   
 }
