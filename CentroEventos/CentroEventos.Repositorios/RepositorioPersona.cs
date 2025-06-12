@@ -4,9 +4,12 @@ using CentroEventos.Aplicacion;
 
 namespace CentroEventos.Repositorios;
 
-public class RepositorioPersona(): IRepositorioPersona
-{   
-
+public class RepositorioPersona: IRepositorioPersona
+{
+    public RepositorioPersona()
+    {
+        CentroEventosDB.Inicializar();
+    }
     public void AgregarPersona(Persona p)
     {
         using var db = new CentroEventosDB();

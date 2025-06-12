@@ -13,4 +13,12 @@ public class CentroEventosDB : DbContext
     {
         optionsBuilder.UseSqlite("data source=CentroEventos.sqlite");
     }
+    public static void Inicializar()
+    {
+        using var context = new CentroEventosDB();
+        if (context.Database.EnsureCreated())
+        {
+            Console.WriteLine("Se creó base de datos");
+        }
+    }
 }

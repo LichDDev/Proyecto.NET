@@ -4,8 +4,13 @@ using Microsoft.VisualBasic;
 
 namespace CentroEventos.Repositorios;
 
-public class RepositorioEventoDeportivo () : IRepositorioEventoDeportivo
+public class RepositorioEventoDeportivo  : IRepositorioEventoDeportivo
 {
+    public RepositorioEventoDeportivo()
+    {
+        CentroEventosDB.Inicializar();
+    }
+    
     public void AgregarEventoDeportivo(EventoDeportivo e)
     {
         using var db = new CentroEventosDB();
@@ -15,6 +20,7 @@ public class RepositorioEventoDeportivo () : IRepositorioEventoDeportivo
     public bool EliminarEventoDeportivo(int idEvento)
     {
         using var db = new CentroEventosDB();
+        CentroEventosDB.Inicializar();
         var elim = db.EventosDeportivos.Where(r => r.ID == idEvento).SingleOrDefault();
         if (elim != null)
         {
@@ -47,6 +53,7 @@ public class RepositorioEventoDeportivo () : IRepositorioEventoDeportivo
     }
     public List<EventoDeportivo> ListarEventosDeportivos()
     {
+        
         using var db = new CentroEventosDB();
         return db.EventosDeportivos.ToList();
     }
