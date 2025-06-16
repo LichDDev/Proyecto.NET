@@ -11,7 +11,7 @@ Servicios.AddSingleton<IRepositorioEventoDeportivo, RepositorioEventoDeportivo>(
 Servicios.AddTransient<IValidadorPersona, ValidacionPersona>();
 Servicios.AddTransient<IValidadorReserva, ValidacionReserva>();
 Servicios.AddTransient<IValidadorEventoDeportivo, ValidacionEventoDeportivo>();
-Servicios.AddTransient<IServicioAutorizacion,ServicioAutorizacionProvisorio>();
+Servicios.AddTransient<IServicioAutorizacion,ServicioAutorizacion>();
 //casos de uso
 //Personas
 Servicios.AddTransient<AgregarPersonaUseCase>();
