@@ -1,9 +1,10 @@
 using System;
 using CentroEventos.Aplicacion;
+using Microsoft.VisualBasic;
 
 namespace CentroEventos.Repositorios;
 
-public class RepositorioEventoDeportivo () : IRepositorioEventoDeportivo
+public class RepositorioEventoDeportivo  : IRepositorioEventoDeportivo
 {
     public void AgregarEventoDeportivo(EventoDeportivo e)
     {
@@ -11,7 +12,6 @@ public class RepositorioEventoDeportivo () : IRepositorioEventoDeportivo
         context.Eventos.Add(e);
         context.SaveChanges();
     }
-
     public bool EliminarEventoDeportivo(int idEvento)
     {
         using var context = new CentroDeportivoContext();

@@ -32,6 +32,7 @@ public class ModificarEventoDeportivoUseCase(IRepositorioEventoDeportivo repoEve
         {
             throw new OperacionInvalidaException("No se puede modificar un evento pasado");
         }   
-        repoEve.ModificarEventoDeportivo(id, e);
+        if(!repoEve.ModificarEventoDeportivo(id,e))
+            throw new EntidadNotFoundException("No se encontró un Evento con esa ID");
     }
 }

@@ -65,7 +65,7 @@ public class RepositorioPersona(): IRepositorioPersona
         var persona = context.Personas.Where(p => p.Email == email).SingleOrDefault();
         return (persona != null);
     }
-    public Persona BuscarPersona(int personaID)
+    public Persona? BuscarPersona(int personaID)
     {
         using var context = new CentroDeportivoContext();
         var persona = context.Personas.Where(p => p.ID == personaID).SingleOrDefault();

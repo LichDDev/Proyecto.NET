@@ -11,5 +11,5 @@ public interface IRepositorioPersona
     bool ExisteId(int personaID);
     bool ExisteDNI(string personaDNI);
     bool ExisteEmail(string personaEmail);
-    Persona BuscarPersona(int personaID);
+    Persona? BuscarPersona(int personaID);
 }

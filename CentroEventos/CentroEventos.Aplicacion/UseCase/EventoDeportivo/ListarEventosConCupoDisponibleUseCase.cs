@@ -5,21 +5,10 @@ namespace CentroEventos.Aplicacion;
 public class ListarEventosConCupoDisponibleUseCase (IRepositorioEventoDeportivo repoEve, IRepositorioReserva repoRes)
 {
     public List<EventoDeportivo> Ejecutar(){
-        
-        List<EventoDeportivo> listaEventos = repoEve.ListarEventosDeportivos();
-        List<EventoDeportivo> listaEventosLibres = new List<EventoDeportivo>();
-
-        foreach (var evento in listaEventos)
-        {
-            if (evento.FechaHoraInicio > DateTime.Now)
-            {
-                int reservas = repoRes.CantPersonasPorEvento(evento.ID);
-                int cupo = repoEve.CupoMaximoPorEvento(evento.ID);
-    
-                if (reservas < cupo)
-                    listaEventosLibres.Add(evento);
-            }
-        }
-        return listaEventosLibres;
+        var listaEventos = repoEve.ListarEventosDeportivos().Where(r=>r.FechaHoraInicio > DateTime.Now);
+        var reservasL = repoRes.ListarReservas();
+        var libres = listaEventos.GroupJoin(reservasL, ev => ev.ID, r => r.EventoDeportivoId,
+                (evento, reservas) => new { Cupos = evento.CupoMaximo, Inscriptas = reservas.Count() , Evento = evento}).Where(o => o.Inscriptas < o.Cupos).Select(r=> r.Evento).ToList();
+        return libres;
     }
 }

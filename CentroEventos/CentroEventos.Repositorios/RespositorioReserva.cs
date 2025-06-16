@@ -3,7 +3,7 @@ using CentroEventos.Aplicacion;
 
 namespace CentroEventos.Repositorios;
 
-public class RespositorioReserva() : IRepositorioReserva
+public class RespositorioReserva : IRepositorioReserva
 {
     public void AgregarReserva(Reserva r)
     {
