@@ -1,10 +1,11 @@
 using System;
 
+
 namespace CentroEventos.Aplicacion;
 
 public class ModificarEventoDeportivoUseCase(IRepositorioEventoDeportivo repoEve, IServicioAutorizacion s,IValidadorEventoDeportivo v)
 {
-    public void Ejecutar(int id, EventoDeportivo e, int idUsuario)
+    public void Ejecutar(EventoDeportivo e, int idUsuario)
     {
         string message;
         //valida el permiso 
@@ -32,7 +33,7 @@ public class ModificarEventoDeportivoUseCase(IRepositorioEventoDeportivo repoEve
         {
             throw new OperacionInvalidaException("No se puede modificar un evento pasado");
         }   
-        if(!repoEve.ModificarEventoDeportivo(id,e))
+        if(!repoEve.ModificarEventoDeportivo(e))
             throw new EntidadNotFoundException("No se encontró un Evento con esa ID");
     }
 }

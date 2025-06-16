@@ -6,7 +6,7 @@ public class EliminarPersonaUseCase(IRepositorioPersona repPer,IRepositorioEvent
 {
     public void Ejecutar(int personaID,int idUsuario)
     {
-        if(!s.PoseeElPermiso(idUsuario,Permiso.UsuarioBaja))
+        if(!s.PoseeElPermiso(idUsuario,Permiso.PersonaBaja))
             throw new FalloAutorizacionException("No tiene Permisos para realizar esta operacion");
         //No puede eliminarse si es responsable de algún evento
         if (repoEve.ListarEventosDeportivos().Any(e => e.ResponsableId == personaID))

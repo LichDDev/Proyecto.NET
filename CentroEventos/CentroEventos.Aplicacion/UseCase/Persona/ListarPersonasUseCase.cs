@@ -1,5 +1,3 @@
-using System;
-
 namespace CentroEventos.Aplicacion;
 
 public class ListarPersonasUseCase (IRepositorioPersona repPer)

@@ -24,17 +24,22 @@ public class RepositorioUsuario() : IRepositorioUsuario
         else
             return false;
     }
-    public bool ModificarUsuario(int id, Usuario u)
+    public List<Usuario> ListarUsuarios()
     {
         using var context = new CentroDeportivoContext();
-        var usuarioModificar = context.Usuarios.Where(u => u.ID == id).SingleOrDefault();
+        return context.Usuarios.ToList();
+    }
+    public bool ModificarUsuario( Usuario u)
+    {
+        using var context = new CentroDeportivoContext();
+        var usuarioModificar = context.Usuarios.Where(a => a.ID == u.ID).SingleOrDefault();
         if (usuarioModificar != null)
         {
             usuarioModificar.ID = u.ID;
             usuarioModificar.Nombre = u.Nombre;
             usuarioModificar.Apellido = u.Apellido;
             usuarioModificar.Email = u.Email;
-            usuarioModificar.Contraseña=u.Contraseña;
+            usuarioModificar.Contraseña = u.Contraseña;
             usuarioModificar.Permisos = u.Permisos;
             context.SaveChanges();
             return true;
@@ -53,7 +58,7 @@ public class RepositorioUsuario() : IRepositorioUsuario
         using var context = new CentroDeportivoContext();
         var usuario = context.Usuarios.Where(u => u.ID == usuarioID).SingleOrDefault();
         if (usuario != null)
-            return usuario.Permisos.Contains(permiso);
+            return usuario.Permisos == null ? false : usuario.Permisos.Contains(permiso);
         else
             return false;
     }

@@ -1,6 +1,6 @@
 using System;
 
-namespace CentroEventos.Aplicacion.Validaciones;
+namespace CentroEventos.Aplicacion;
 
 public class ValidacionUsuario: IValidadorUsuario
 {

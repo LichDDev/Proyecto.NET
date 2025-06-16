@@ -2,6 +2,7 @@ using System;
 using System.Security.AccessControl;
 using CentroEventos.Aplicacion;
 
+
 namespace CentroEventos.Repositorios;
 
 public class RepositorioPersona(): IRepositorioPersona
@@ -25,17 +26,17 @@ public class RepositorioPersona(): IRepositorioPersona
         else
             return false;
     }
-    public bool ModificarPersona(int id, Persona p)
+    public bool ModificarPersona(Persona per)
     {
         using var context = new CentroDeportivoContext();
-        var personaModificar = context.Personas.Where(a => a.ID == id).SingleOrDefault();
+        var personaModificar = context.Personas.Where(a => a.ID == per.ID).SingleOrDefault();
         if (personaModificar != null)
         {
-            personaModificar.DNI = p.DNI;
-            personaModificar.Nombre = p.Nombre;
-            personaModificar.Apellido = p.Apellido;
-            personaModificar.Email = p.Email;
-            personaModificar.Telefono = p.Telefono;
+            personaModificar.DNI = per.DNI;
+            personaModificar.Nombre = per.Nombre;
+            personaModificar.Apellido = per.Apellido;
+            personaModificar.Email = per.Email;
+            personaModificar.Telefono = per.Telefono;
             context.SaveChanges();
             return true;
         }

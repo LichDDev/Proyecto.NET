@@ -1,16 +1,15 @@
-using System;
-
 namespace CentroEventos.Aplicacion;
 
-public class AgregarReservaUseCase(IRepositorioReserva repoRes,IServicioAutorizacion s,IValidadorReserva v)
+public class AgregarReservaUseCase(IRepositorioReserva repoRes, IServicioAutorizacion s, IValidadorReserva v)
 {
-    public void Ejecutar(Reserva r,int IdUsuario){
+    public void Ejecutar(Reserva r, int IdUsuario)
+    {
         string message;
         if (!s.PoseeElPermiso(IdUsuario, Permiso.ReservaAlta))
         {
             throw new FalloAutorizacionException("No tiene Permisos");
         }
-        if(r == null)
+        if (r == null)
             throw new NullReferenceException("Reserva");
         //validaciones
         if (!v.ValidarEntidadesExistentes(r, out message))

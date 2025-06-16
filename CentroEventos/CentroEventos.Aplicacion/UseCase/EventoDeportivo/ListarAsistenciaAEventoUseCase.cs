@@ -1,5 +1,3 @@
-using System;
-
 namespace CentroEventos.Aplicacion;
 
 public class ListarAsistenciaAEventoUseCase (IRepositorioEventoDeportivo repoEve,IRepositorioReserva repoRes,IRepositorioPersona repoPer)
