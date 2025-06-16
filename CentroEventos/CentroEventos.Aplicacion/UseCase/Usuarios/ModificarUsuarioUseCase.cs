@@ -12,6 +12,7 @@ public class ModificarUsuarioUseCase(IRepositorioUsuario repo,IServicioAutorizac
         }
         if (!v.ValidarDatosAusentes(usuario, out string message))
             throw new ValidacionException(message);
-        repo.ModificarUsuario(usuario);
+        if (!repo.ModificarUsuario(usuario))
+            throw new EntidadNotFoundException("no existe El usuario");
     }
 }

@@ -10,6 +10,7 @@ public class EliminarUsuarioUseCase(IRepositorioUsuario repo,IServicioAutorizaci
         {
             throw new FalloAutorizacionException("No tiene permisos para realizar esta operacion");
         }
-        repo.EliminarUsuario(id);
+        if (!repo.EliminarUsuario(id))
+            throw new EntidadNotFoundException("no existe este usuario");
     }
 }
