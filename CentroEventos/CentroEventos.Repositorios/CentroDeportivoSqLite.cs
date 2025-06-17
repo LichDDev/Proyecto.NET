@@ -14,11 +14,18 @@ public class CentroDeportivoSqLite
             connection.Open();
             using (var command = connection.CreateCommand())
             {
-            command.CommandText = "PRAGMA journal_mode=DELETE;";
-            command.ExecuteNonQuery();
+                command.CommandText = "PRAGMA journal_mode=DELETE;";
+                command.ExecuteNonQuery();
             }
             Console.WriteLine("Se creó la base de datos");
             context.SaveChanges();
+        }
+    }
+    public static void Delet()
+    {
+        using (var context = new CentroDeportivoContext())
+        {
+            context.Database.EnsureDeleted();
         }
     }
 }

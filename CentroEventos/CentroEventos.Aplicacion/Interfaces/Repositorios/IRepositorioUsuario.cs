@@ -9,5 +9,7 @@ public interface IRepositorioUsuario
     bool EliminarUsuario(int usuarioID);
     bool ModificarUsuario(Usuario usuario);
     bool ExisteId(int usuarioID);
+    bool ExisteEmail(string Email);
     bool BuscarPermiso(int usuarioID, Permiso permiso);
+    bool VerificarContraseña(Usuario usuario);
 }

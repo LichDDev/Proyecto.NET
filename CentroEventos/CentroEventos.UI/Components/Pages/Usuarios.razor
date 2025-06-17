@@ -30,6 +30,6 @@
     List<Usuario> _lista=new List<Usuario>();
     protected override void OnInitialized()
     {
-        _lista=ListarUsuariosUseCase.Ejecutar();
+        _lista=ListarUsuariosUseCase.Ejecutar(1);
     }
 }

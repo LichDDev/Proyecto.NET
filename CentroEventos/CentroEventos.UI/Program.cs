@@ -2,6 +2,7 @@ using CentroEventos.UI.Components;
 using CentroEventos.Aplicacion;
 using CentroEventos.Repositorios;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -30,6 +31,7 @@ builder.Services.AddTransient<AgregarUsuarioUseCase>();
 builder.Services.AddTransient<ListarUsuariosUseCase>();
 builder.Services.AddTransient<EliminarUsuarioUseCase>();
 builder.Services.AddTransient<ModificarUsuarioUseCase>();
+builder.Services.AddTransient<VerificarUsuarioUseCase>();
 
 // Repositorios
 builder.Services.AddScoped<IRepositorioPersona, RepositorioPersona>();
@@ -44,6 +46,7 @@ builder.Services.AddScoped<IValidadorEventoDeportivo, ValidacionEventoDeportivo>
 builder.Services.AddScoped<IValidadorReserva, ValidacionReserva>();
 builder.Services.AddScoped<IValidadorUsuario, ValidacionUsuario>();
 
+CentroDeportivoSqLite.Delet();
 CentroDeportivoSqLite.Inicializar();
 
 var app = builder.Build();

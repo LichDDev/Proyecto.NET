@@ -11,9 +11,14 @@ public class RepositorioUsuario() : IRepositorioUsuario
     {
         using var context = new CentroDeportivoContext();
         //le aplico le hash al la contraseña antes de agregar al usuario
-        u.Contraseña = HashPassword(u.Contraseña!= null ? u.Contraseña: "");
+        u.Contraseña = HashPassword(u.Contraseña != null ? u.Contraseña : "");
         context.Usuarios.Add(u);
-        context.SaveChanges();
+        context.SaveChanges(); // Aquí se asigna el ID
+        if (u.ID == 1)
+        {
+            OtorgarPermisos(u.ID);
+            context.SaveChanges(); // Guardar los permisos asignados
+        }
     }
     public bool EliminarUsuario(int id)
     {
@@ -44,7 +49,6 @@ public class RepositorioUsuario() : IRepositorioUsuario
             usuarioModificar.Apellido = u.Apellido;
             usuarioModificar.Email = u.Email;
             usuarioModificar.Contraseña = u.Contraseña;
-            usuarioModificar.Permisos = u.Permisos;
             context.SaveChanges();
             return true;
         }
@@ -57,12 +61,18 @@ public class RepositorioUsuario() : IRepositorioUsuario
         var usuario = context.Usuarios.Where(u => u.ID == usuarioID).SingleOrDefault();
         return (usuario != null);
     }
+    public bool ExisteEmail(string usuarioEmail)
+    {
+        using var context = new CentroDeportivoContext();
+        var usuario = context.Usuarios.Where(u => u.Email == usuarioEmail).SingleOrDefault();
+        return (usuario != null);
+    }
     public bool BuscarPermiso(int usuarioID, Permiso permiso)
     {
         using var context = new CentroDeportivoContext();
         var usuario = context.Usuarios.Where(u => u.ID == usuarioID).SingleOrDefault();
         if (usuario != null)
-            return usuario.Permisos == null ? false : usuario.Permisos.Contains(permiso);
+            return context.Permitidos.Any(r=>r.UsuarioId == usuario.ID && r.Permiso == permiso);
         else
             return false;
     }
@@ -72,9 +82,9 @@ public class RepositorioUsuario() : IRepositorioUsuario
         //se busca al usuario por su email (idea inicial)
         var user = context.Usuarios.Where(r => r.Email == usuario.Email).SingleOrDefault();
         if (user != null)
-        {   
+        {
             //se aplica el hash a la contraseña ingresada
-            string? contra= HashPassword(usuario.Contraseña == null ? "": usuario.Contraseña);
+            string? contra = HashPassword(usuario.Contraseña == null ? "" : usuario.Contraseña);
             // se hace la comparacion con la contraseña que esta en la base de datos
             return user.Contraseña != null ? user.Contraseña.Equals(contra) : false;
         }
@@ -90,5 +100,15 @@ public class RepositorioUsuario() : IRepositorioUsuario
         byte[] hashBytes = sha256.ComputeHash(inputBytes);
         // Convertir a string hexadecimal
         return Convert.ToHexString(hashBytes); // .NET 5+
+    }
+    private void OtorgarPermisos(int id)
+    {
+        using var context = new CentroDeportivoContext();
+        foreach (Permiso item in Enum.GetValues(typeof(Permiso)))
+        {
+            context.Permitidos.Add(new Permitido(item, id));
+            context.SaveChanges();
+        }
+
     }
 }

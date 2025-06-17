@@ -9,14 +9,12 @@ public class Usuario
     public string? Apellido { get; set; }
     public string? Email { get; set; }
     public string? Contraseña { get; set; }
-    public List<Permiso>? Permisos;
     protected Usuario() { }
-    public Usuario(string? nombre, string? apellido, string? email, string? contraseña, List<Permiso>? permisos = null)
+    public Usuario(string? nombre, string? apellido, string? email, string? contraseña)
     {
         Nombre = nombre;
         Apellido = apellido;
         Email = email;
         Contraseña = contraseña;
-        Permisos = permisos;
     }
 }
