@@ -4,5 +4,5 @@ namespace CentroEventos.Aplicacion;
 
 public interface IValidadorUsuario
 {
-    bool ValidarDatosAusentes(int id,out string message);
+    bool ValidarDatosAusentes(Usuario u,out string message);
 }

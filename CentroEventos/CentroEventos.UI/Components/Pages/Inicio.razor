@@ -1,0 +1,22 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@inject AgregarUsuarioUseCase AgregarUsuarioUseCase
+<PageTitle>Inicio</PageTitle>
+@if(!sesion)
+{
+    <h1>Inicia Sesion</h1>
+    <input placeholder="Email"@bind="u.Email" /><br>
+    <input placeholder="Contraseña"@bind="u.Contraseña" /><br>
+    <button @oneclick="LogIn">Log In</button>
+    <button class="btn btn-secondary" @oneclick="SignIn">Sign In</button>
+}
+
+@code{
+    bool sesion=false;
+    ElementReference input_01;
+    Usuario u;
+    void SignIn()
+    {
+        AgregarUsuarioUseCase(u);
+    }
+}

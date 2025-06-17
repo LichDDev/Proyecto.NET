@@ -2,7 +2,7 @@ using System;
 
 namespace CentroEventos.Aplicacion.Validaciones;
 
-public class ValidacionUsuario(IRepositorioUsuario repo) : IValidadorUsuario
+public class ValidacionUsuario : IValidadorUsuario
 {
     public bool ValidarDatosAusentes(Usuario u, out string message)
     {
