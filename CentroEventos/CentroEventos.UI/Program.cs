@@ -26,6 +26,11 @@ builder.Services.AddTransient<ListarReservasUseCase>();
 builder.Services.AddTransient<EliminarPersonaUseCase>();
 builder.Services.AddTransient<ModificarReservaUseCase>();
 
+builder.Services.AddTransient<AgregarUsuarioUseCase>();
+builder.Services.AddTransient<ListarUsuariosUseCase>();
+builder.Services.AddTransient<EliminarUsuarioUseCase>();
+builder.Services.AddTransient<ModificarUsuarioUseCase>();
+
 // Repositorios
 builder.Services.AddScoped<IRepositorioPersona, RepositorioPersona>();
 builder.Services.AddScoped<IRepositorioEventoDeportivo, RepositorioEventoDeportivo>();
@@ -37,6 +42,7 @@ builder.Services.AddScoped<IServicioAutorizacion, ServicioAutorizacion>();
 builder.Services.AddScoped<IValidadorPersona, ValidacionPersona>();
 builder.Services.AddScoped<IValidadorEventoDeportivo, ValidacionEventoDeportivo>();
 builder.Services.AddScoped<IValidadorReserva, ValidacionReserva>();
+builder.Services.AddScoped<IValidadorUsuario, ValidacionUsuario>();
 
 CentroDeportivoSqLite.Inicializar();
 

@@ -2,11 +2,7 @@ using System;
 
 namespace CentroEventos.Aplicacion;
 
-<<<<<<< HEAD
-public class ValidacionUsuario : IValidadorUsuario
-=======
 public class ValidacionUsuario: IValidadorUsuario
->>>>>>> a7c52aa1d099b8ec3724cbebfc5b31278808aeb9
 {
     public bool ValidarDatosAusentes(Usuario u, out string message)
     {

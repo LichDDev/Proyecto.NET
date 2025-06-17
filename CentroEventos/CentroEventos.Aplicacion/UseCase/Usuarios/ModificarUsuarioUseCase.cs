@@ -1,6 +1,6 @@
 using System;
 
-namespace CentroEventos.Aplicacion.UseCase.Usuarios;
+namespace CentroEventos.Aplicacion;
 
 public class ModificarUsuarioUseCase(IRepositorioUsuario repo,IServicioAutorizacion s,IValidadorUsuario v)
 {

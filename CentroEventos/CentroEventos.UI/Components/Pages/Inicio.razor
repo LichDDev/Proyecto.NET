@@ -2,21 +2,54 @@
 @rendermode InteractiveServer
 @inject AgregarUsuarioUseCase AgregarUsuarioUseCase
 <PageTitle>Inicio</PageTitle>
-@if(!sesion)
+@if(visible)
 {
-    <h1>Inicia Sesion</h1>
-    <input placeholder="Email"@bind="u.Email" /><br>
-    <input placeholder="Contraseña"@bind="u.Contraseña" /><br>
-    <button @oneclick="LogIn">Log In</button>
-    <button class="btn btn-secondary" @oneclick="SignIn">Sign In</button>
+    @if(!sesion)
+    {
+        <h1>Inicia Sesion</h1>
+        <input placeholder="Email"@bind="email" /><br>
+        <input placeholder="Contraseña"@bind="password" /><br>
+        <button class="btn btn-primary" @onclick="LogIn">Log In</button>
+        <button class="btn btn-secondary" @onclick="SignIn_r">Sign In</button>
+    }
+}
+else
+{
+    <h1>Registrarce</h1>
+    <input placeholder="Nombre"@bind="nom" /><br>
+    <input placeholder="Apellido"@bind="ape" /><br>
+    <input placeholder="Email"@bind="email" /><br>
+    <input placeholder="Contraseña"@bind="password" /><br>
+    <button class="btn btn-primary" @onclick="SignIn">Sign In</button>
+    <button class="btn btn-secondary" @onclick="LogIn_r">Log In</button>
 }
 
 @code{
     bool sesion=false;
+    bool visible=true;
     ElementReference input_01;
-    Usuario u;
-    void SignIn()
+    string? nom;
+    string? ape;
+    string? email;
+    string? password;
+    public void SignIn()
     {
-        AgregarUsuarioUseCase(u);
+        Usuario u=new Usuario(nom,ape,email,password);
+        AgregarUsuarioUseCase.Ejecutar(u,1);
+    }
+    public void LogIn()
+    {
+
+    }
+    //Los metodos siguientes son solo para rotar entre login y signin
+    public void LogIn_r()
+    {
+        visible=true;
+        InvokeAsync(StateHasChanged);
+    }
+    public void SignIn_r()
+    {
+        visible=false;
+        InvokeAsync(StateHasChanged);
     }
 }
