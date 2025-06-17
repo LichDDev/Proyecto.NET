@@ -3,7 +3,7 @@ using CentroEventos.Aplicacion;
 
 namespace CentroEventos.Repositorios;
 
-public class RespositorioReserva() : IRepositorioReserva
+public class RespositorioReserva : IRepositorioReserva
 {
     public void AgregarReserva(Reserva r)
     {
@@ -24,16 +24,16 @@ public class RespositorioReserva() : IRepositorioReserva
         else
             return false;
     }
-    public bool ModificarReserva(int id, Reserva r)
+    public bool ModificarReserva( Reserva res)
     {
         using var context = new CentroDeportivoContext();
-        var reservaModificar = context.Reservas.Where(r => r.ID == id).SingleOrDefault();
+        var reservaModificar = context.Reservas.Where(e => e.ID == res.ID).SingleOrDefault();
         if (reservaModificar != null)
         {
-            reservaModificar.PersonaId = r.PersonaId;
-            reservaModificar.EventoDeportivoId = r.EventoDeportivoId;
-            reservaModificar.FechaAltaReserva = r.FechaAltaReserva;
-            reservaModificar.EstadoAsistencia = r.EstadoAsistencia;
+            reservaModificar.PersonaId = res.PersonaId;
+            reservaModificar.EventoDeportivoId = res.EventoDeportivoId;
+            reservaModificar.FechaAltaReserva = res.FechaAltaReserva;
+            reservaModificar.EstadoAsistencia = res.EstadoAsistencia;
             context.SaveChanges();
             return true;
         }

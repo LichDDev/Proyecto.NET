@@ -1,5 +1,6 @@
 using System;
 
+
 namespace CentroEventos.Aplicacion;
 
 public class ListarEventosDeportivosUseCase (IRepositorioEventoDeportivo repoEve)

@@ -10,6 +10,9 @@ public enum Permiso
     ReservaAlta,            //Puede registrar nuevas reservas
     ReservaModificacion,    //Puede modificar las reservas
     ReservaBaja,            //Puede dar de baja reservas
+    PersonaAlta,            //Puede dar de alta Personas
+    PersonaBaja,            //Puede dar de Baja Personas
+    PersonaModificacion,      //Puede Modificar Personas
     UsuarioAlta,            //Puede dar de alta nuevos usuarios del sistema
     UsuarioModificacion,    //Puede modificar los datos de los usuarios
     UsuarioBaja             //Puede dar de baja usuarios del sistema

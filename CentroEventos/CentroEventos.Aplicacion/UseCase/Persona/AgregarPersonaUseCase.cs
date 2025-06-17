@@ -5,7 +5,7 @@ namespace CentroEventos.Aplicacion;
 public class AgregarPersonaUseCase (IRepositorioPersona repPer,IServicioAutorizacion s,IValidadorPersona v)
 {
     public void Ejecutar(Persona p,int idUsuario){ 
-        if(!s.PoseeElPermiso(idUsuario,Permiso.UsuarioAlta))
+        if(!s.PoseeElPermiso(idUsuario,Permiso.PersonaAlta))
             throw new FalloAutorizacionException("No tiene Permisos para realizar esta operacion");
         if (p == null)
                 throw new NullReferenceException("entidad = null");

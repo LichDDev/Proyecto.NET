@@ -1,6 +1,6 @@
-﻿namespace CentroEventos.Aplicacion;
+namespace CentroEventos.Aplicacion;
 
-public class EventoDeportivo
+public class EventoDeportivo 
 {
     public int ID { get; set; }
     public string? Nombre { get; set; }

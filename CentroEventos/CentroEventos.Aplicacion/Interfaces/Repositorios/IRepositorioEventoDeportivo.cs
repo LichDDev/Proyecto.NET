@@ -6,7 +6,7 @@ public interface IRepositorioEventoDeportivo
 {
     void AgregarEventoDeportivo(EventoDeportivo e);
     bool EliminarEventoDeportivo(int eventoID);
-    bool ModificarEventoDeportivo(int eventoID,EventoDeportivo evento);
+    bool ModificarEventoDeportivo(EventoDeportivo evento);
     List<EventoDeportivo> ListarEventosDeportivos();
     bool ExisteId(int eventoID);
     int CupoMaximoPorEvento(int eventoID);

@@ -1,9 +1,11 @@
 using System;
 using CentroEventos.Aplicacion;
+using Microsoft.VisualBasic;
+
 
 namespace CentroEventos.Repositorios;
 
-public class RepositorioEventoDeportivo () : IRepositorioEventoDeportivo
+public class RepositorioEventoDeportivo  : IRepositorioEventoDeportivo
 {
     public void AgregarEventoDeportivo(EventoDeportivo e)
     {
@@ -11,7 +13,6 @@ public class RepositorioEventoDeportivo () : IRepositorioEventoDeportivo
         context.Eventos.Add(e);
         context.SaveChanges();
     }
-
     public bool EliminarEventoDeportivo(int idEvento)
     {
         using var context = new CentroDeportivoContext();
@@ -25,18 +26,18 @@ public class RepositorioEventoDeportivo () : IRepositorioEventoDeportivo
         else
             return false;
     }
-    public bool ModificarEventoDeportivo(int id, EventoDeportivo e)
+    public bool ModificarEventoDeportivo(EventoDeportivo eve)
     {
         using var context = new CentroDeportivoContext();
-        var eventoModificar = context.Eventos.Where(e => e.ID == id).SingleOrDefault();
+        var eventoModificar = context.Eventos.Where(e => e.ID == eve.ID).SingleOrDefault();
         if (eventoModificar != null)
         {
-            eventoModificar.Nombre = e.Nombre;
-            eventoModificar.Descripcion = e.Descripcion;
-            eventoModificar.FechaHoraInicio = e.FechaHoraInicio;
-            eventoModificar.DuracionHoras = e.DuracionHoras;
-            eventoModificar.CupoMaximo = e.CupoMaximo;
-            eventoModificar.ResponsableId = e.ResponsableId;
+            eventoModificar.Nombre = eve.Nombre;
+            eventoModificar.Descripcion = eve.Descripcion;
+            eventoModificar.FechaHoraInicio = eve.FechaHoraInicio;
+            eventoModificar.DuracionHoras = eve.DuracionHoras;
+            eventoModificar.CupoMaximo = eve.CupoMaximo;
+            eventoModificar.ResponsableId = eve.ResponsableId;
             context.SaveChanges();
             return true;
         }
