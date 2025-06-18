@@ -10,8 +10,7 @@
             <div class="container-fluid">
                 <a class="navbar-brand" href="">Cerrar Sesion</a>
             </div>
-            <button class="bi bi-person-circle fs-2 d-flex align-items-center" @onclick="Abrir"></button>
-            <Perfil @ref="perfil"/>
+            <button @onclick="Abrir"></button>
         </div>
 
         <article class="content px-4">
@@ -27,9 +26,8 @@
 </div>
 
 @code{
-    Perfil perfil=null!;
     public void Abrir()
     {
-        perfil.Mostrar();
+        Console.WriteLine("se abre");
     }
 }

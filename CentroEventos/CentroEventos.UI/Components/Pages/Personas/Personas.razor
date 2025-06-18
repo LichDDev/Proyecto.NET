@@ -4,7 +4,7 @@
 @inject EliminarPersonaUseCase EliminarPersonaUseCase
 @inject ModificarPersonaUseCase ModificarPersonaUseCase
 @inject ListarPersonasUseCase ListarPersonasUseCase
-<EliminarPersona @ref="eliminar" OnConfirmado="()=>Eliminar(PerElim ?? new Persona(0))" Mensaje="@msg"/>
+<EliminarEntidad @ref="eliminar" OnConfirmado="()=>Eliminar(PerElim ?? new Persona(0))" Mensaje="@msg"/>
 <PageTitle>Personas</PageTitle>
 <h1>Personas</h1>
 <table class="table">
@@ -49,11 +49,12 @@
         _lista=ListarPersonasUseCase.Ejecutar();
     }
     EditarPersona editar=null!;
-    EliminarPersona eliminar=null!;
+    EliminarEntidad eliminar=null!;
     Persona? PerElim {get;set;}
     string msg {get;set;} = "";
     public void Agregar()
     {
+        Console.WriteLine("A VER SI ESTO SE MUSTRRA");
         editar.Mostrar(true);
         StateHasChanged();
     }

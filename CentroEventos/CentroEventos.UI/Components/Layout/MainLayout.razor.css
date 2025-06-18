@@ -20,9 +20,6 @@ main {
     display: flex;
     align-items: center;
 }
-.top-row button{
-    border-style: none;
-}
 
 @media (min-width: 641px) {
     .page {
