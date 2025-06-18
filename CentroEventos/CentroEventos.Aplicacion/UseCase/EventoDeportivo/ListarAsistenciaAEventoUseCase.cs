@@ -7,7 +7,7 @@ public class ListarAsistenciaAEventoUseCase (IRepositorioEventoDeportivo repoEve
         var listaEvento = repoEve.ListarEventosDeportivos();
         var listaPersona = repoPer.ListarPersonas();
 
-        var listaAsistencia = listaEvento.Where(r => r.FechaHoraInicio < DateTime.Now && r.ID == idEvento).Join(listaReserva.Where(r=>r.EstadoAsistencia == Estado.Presente),
+        var listaAsistencia = listaEvento.Where(r => DateTime.Parse(r.FechaHoraInicio) < DateTime.Now && r.ID == idEvento).Join(listaReserva.Where(r=>r.EstadoAsistencia == Estado.Presente),
                             l => l.ID,
                             r => r.EventoDeportivoId,
                             (evento,reserva) => new { id = reserva.PersonaId}

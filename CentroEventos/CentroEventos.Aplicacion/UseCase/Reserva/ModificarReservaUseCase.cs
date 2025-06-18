@@ -4,7 +4,7 @@ namespace CentroEventos.Aplicacion;
 
 public class ModificarReservaUseCase (IRepositorioReserva repoRes,IServicioAutorizacion s,IValidadorReserva v)
 {
-    public void Ejecutar(int id,Reserva r,int IdUsuario){
+    public void Ejecutar(Reserva r,int IdUsuario){
         string message;
         if (!s.PoseeElPermiso(IdUsuario, Permiso.ReservaModificacion))
             throw new FalloAutorizacionException("No tiene Permisos para realizar esta operacion");

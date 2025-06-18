@@ -7,7 +7,8 @@
 
     <main>
         <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+            <button class="bi bi-person-circle fs-2 d-flex align-items-center" @onclick="Abrir"></button>
+            <Perfil @ref="perfil"/>
         </div>
 
         <article class="content px-4">
@@ -21,3 +22,11 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+
+@code{
+    Perfil perfil=null!;
+    public void Abrir()
+    {
+        perfil.Mostrar();
+    }
+}

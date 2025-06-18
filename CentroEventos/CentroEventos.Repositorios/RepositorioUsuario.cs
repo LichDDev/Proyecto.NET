@@ -72,7 +72,7 @@ public class RepositorioUsuario() : IRepositorioUsuario
         using var context = new CentroDeportivoContext();
         var usuario = context.Usuarios.Where(u => u.ID == usuarioID).SingleOrDefault();
         if (usuario != null)
-            return context.Permitidos.Any(r=>r.UsuarioId == usuario.ID && r.Permiso == permiso);
+            return context.Permitidos.Any(r => r.UsuarioId == usuario.ID && r.Permiso == permiso);
         else
             return false;
     }
@@ -110,5 +110,14 @@ public class RepositorioUsuario() : IRepositorioUsuario
             context.SaveChanges();
         }
 
+    }
+    public int BuscarId(string mail)
+    {
+        using var context = new CentroDeportivoContext();
+        var usuario = context.Usuarios.Where(u => u.Email == mail).SingleOrDefault();
+        if (usuario != null)
+            return usuario.ID;
+        else
+            return 0;
     }
 }

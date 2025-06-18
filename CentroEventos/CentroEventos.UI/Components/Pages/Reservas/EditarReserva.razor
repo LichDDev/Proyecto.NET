@@ -1,0 +1,98 @@
+@rendermode InteractiveServer
+@inject AgregarReservaUseCase AgregarReservaUseCase
+@inject ModificarReservaUseCase ModificarReservaUseCase
+@if(visible)
+{
+    <div class="Contenedor">
+        <div class="Datos">
+            <h1>@(accion ? "Agregar Reserva" : "Modificar Reserva")</h1>
+            @if(!poseePermiso)
+            {
+                <pre>@mensaje</pre>
+
+            }
+            else if(error)
+            {
+                <pre>@mensaje</pre>
+            }
+            <div class="Salir">
+                <button class="bi bi-x-circle fs-2 d-flex align-items-center" aria-hidden="true" @onclick="Close"></button>
+            </div>
+            <div class="Recuadros">
+                <input type="text"placeholder="Persona ID"@bind="perId" /><br>
+                <input type="text"placeholder="Evento Deportivo ID"@bind="evId" /><br>
+                <input type="text" placeholder="Fecha Alta"@bind="fecha" /><br>
+                <input type="text" placeholder="Estado Asistencia"@bind="estado" /><br>
+            </div>
+            <button class="btn btn-primary" @onclick="Editar">@(accion ? "Agregar Reserva" : "Modificar Reserva")</button>
+        </div>
+    </div>
+}
+@code
+{
+    int? perId;
+    int? evId;
+    string? fecha;
+    Estado? estado;
+    bool poseePermiso=true;
+    bool error=false;
+    bool accion;
+    string? mensaje;
+    private bool visible=false;
+    int id;
+    public void Mostrar(bool accion,Reserva? r=null)
+    {
+        visible=true;
+        this.accion = accion;
+        if (r is not null)
+        {
+            perId  = r.PersonaId;
+            evId  = r.EventoDeportivoId;
+            fecha  = r.FechaAltaReserva;
+            estado = r.EstadoAsistencia;
+            id = r.ID;
+        }
+        else
+        {
+            fecha = null;
+            perId = evId = null;
+            estado = null;
+        }
+        StateHasChanged();
+    }
+    [Parameter] public EventCallback OnReservaAgregada { get; set; }
+
+    void Editar()
+    {
+        try
+        {
+            if(accion)
+            {
+                AgregarReservaUseCase.Ejecutar(new Reserva(perId.Value,evId.Value,fecha,estado),Usuario.s_miId);
+            }
+            else
+            {
+                ModificarReservaUseCase.Ejecutar(new Reserva(id,perId.Value,evId.Value,fecha,estado),Usuario.s_miId);
+            }
+            StateHasChanged();
+            OnReservaAgregada.InvokeAsync(); 
+            visible = false;
+        }
+        catch(FalloAutorizacionException e)
+        {
+            poseePermiso=false;
+            mensaje=e.Message;
+        }
+        catch(Exception e)
+        {
+            error=true;
+            mensaje=e.Message;
+        }
+    }
+    public void Close()
+    {
+        visible=false;
+        poseePermiso=true;
+        error=false;
+    }
+}

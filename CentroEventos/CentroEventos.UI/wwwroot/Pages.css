@@ -1,0 +1,101 @@
+.table{
+    column-width:  1px;
+    color:black;
+}
+.Recuadros input[type="text"],
+.Recuadros input[type="password"]{
+    width: 400px;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #aaa;
+    border-radius: 10px;
+    outline: none;
+    display: flex;
+}
+.Contenedor{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    background-color: rgba(65, 65, 65, 0.767);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.Contenedor .Datos{
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    align-content: center;
+    align-items:center;
+    width: 500px;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 2px 2px 5px 5px rgba(0,0,0,0.15);
+    border-radius: 15px;
+}
+.Contenedor .PopUp{
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    flex-direction:row;
+    justify-content: center;
+    align-content: center;
+    align-items:center;
+    width:auto;
+    height:400px;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 2px 2px 5px 5px rgba(0,0,0,0.15);
+}
+.Contenedor .PopUp img{
+    position: relative;
+    top:-10%;
+    left: 35%;
+    width: 150px;
+    height: 150px;
+}
+.Contenedor .PopUp h3{
+    position: relative;
+    top: -10px;;
+    display:flex;
+    flex-direction:column;
+}
+.Contenedor .PopUp button{
+    margin-right: 10px;
+    position: relative;
+    align-items: center;
+    padding: 10px;
+    margin-top: 4px;
+    right: -31%;
+    top:20px;
+}
+.Datos button{
+    margin-bottom: 10px;
+}
+.Datos .Salir button{
+    position: relative;
+    top: -190%;
+    right: -210px;
+    border-style: none;
+    background-color: #f7f7f700;
+}
+.Datos h1{
+    margin-top: 10px;
+}
+.Datos pre{
+    position: relative;
+    color:red;
+    font-size: large;
+}
+.Alert{
+    position: fixed;
+    top:0;
+    left: 0;
+    right: 0;
+    bottom:0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

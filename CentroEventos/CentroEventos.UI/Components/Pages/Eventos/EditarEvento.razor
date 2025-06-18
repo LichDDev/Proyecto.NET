@@ -1,0 +1,104 @@
+@rendermode InteractiveServer
+@inject AgregarEventoDeportivoUseCase AgregarEventoDeportivoUseCase
+@inject ModificarEventoDeportivoUseCase ModificarEventoDeportivoUseCase
+@if(visible)
+{
+    <div class="Contenedor">
+        <div class="Datos">
+            <h1>@(accion ? "Agregar Evento" : "Modificar Evento")</h1>
+            @if(!poseePermiso)
+            {
+                <pre>@mensaje</pre>
+
+            }
+            else if(error)
+            {
+                <pre>@mensaje</pre>
+            }
+            <div class="Salir">
+                <button class="bi bi-x-circle fs-2 d-flex align-items-center" aria-hidden="true" @onclick="Close"></button>
+            </div>
+            <div class="Recuadros">
+                <input type="text"placeholder="Nombre"@bind="nom" /><br>
+                <input type="text" placeholder="Descripcion"@bind="desc" /><br>
+                <input type="text" placeholder="Fecha Inicio"@bind="fecha" /><br>
+                <input type="text" placeholder="Duracion"@bind="dur" /><br>
+                <input type="text" placeholder="Cupo Maximo"@bind="cupo" /><br>
+                <input type="text" placeholder="Responsable ID"@bind="respId" /><br>
+            </div>
+            <button class="btn btn-primary" @onclick="Editar">@(accion ? "Agregar Evento" : "Modificar Evento")</button>
+        </div>
+    </div>
+}
+@code
+{
+    int id;
+    string? nom;
+    string? desc;
+    string? fecha;
+    double? dur;
+    int? cupo;
+    int? respId;
+    bool poseePermiso=true;
+    bool error=false;
+    bool accion;
+    string? mensaje;
+    private bool visible=false;
+    public void Mostrar(bool accion,EventoDeportivo? e=null)
+    {
+        visible=true;
+        this.accion = accion;
+        if (e is not null)
+        {
+            nom  = e.Nombre;
+            desc  = e.Descripcion;
+            fecha = e.FechaHoraInicio;
+            dur  = e.DuracionHoras;
+            cupo = e.CupoMaximo;
+            respId = e.ResponsableId;
+            id= e.ID;
+        }
+        else
+        {
+            nom = desc = fecha = null;
+            dur = null;
+            cupo = respId = null;
+        }
+        StateHasChanged();
+    }
+    [Parameter] public EventCallback OnEventoAgregado { get; set; }
+
+    void Editar()
+    {
+        try
+        {
+            if(accion)
+            {
+                AgregarEventoDeportivoUseCase.Ejecutar(new EventoDeportivo(nom,desc,fecha,dur.Value,cupo.Value,respId.Value),Usuario.s_miId);
+            }
+            else
+            {
+                ModificarEventoDeportivoUseCase.Ejecutar(new EventoDeportivo(id,nom,desc,fecha,dur.Value,cupo.Value,respId.Value),Usuario.s_miId);
+            }
+            StateHasChanged();
+            OnEventoAgregado.InvokeAsync(); 
+            visible = false;
+        }
+        catch(FalloAutorizacionException ex)
+        {
+            poseePermiso=false;
+            mensaje=ex.Message;
+        }
+        catch(Exception ex)
+        {
+            error=true;
+            mensaje=ex.Message;
+        }
+    }
+    public void Close()
+    {
+        visible=false;
+        poseePermiso=true;
+        error=false;
+    }
+}

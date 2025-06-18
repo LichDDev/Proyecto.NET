@@ -24,7 +24,7 @@ builder.Services.AddTransient<ModificarEventoDeportivoUseCase>();
 
 builder.Services.AddTransient<AgregarReservaUseCase>();
 builder.Services.AddTransient<ListarReservasUseCase>();
-builder.Services.AddTransient<EliminarPersonaUseCase>();
+builder.Services.AddTransient<EliminarReservaUseCase>();
 builder.Services.AddTransient<ModificarReservaUseCase>();
 
 builder.Services.AddTransient<AgregarUsuarioUseCase>();
@@ -32,6 +32,7 @@ builder.Services.AddTransient<ListarUsuariosUseCase>();
 builder.Services.AddTransient<EliminarUsuarioUseCase>();
 builder.Services.AddTransient<ModificarUsuarioUseCase>();
 builder.Services.AddTransient<VerificarUsuarioUseCase>();
+builder.Services.AddTransient<BuscarIdUseCase>();
 
 // Repositorios
 builder.Services.AddScoped<IRepositorioPersona, RepositorioPersona>();

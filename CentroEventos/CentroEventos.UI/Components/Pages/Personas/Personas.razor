@@ -1,0 +1,92 @@
+@page "/Personas"
+@rendermode InteractiveServer
+@inject AgregarPersonaUseCase AgregarPersonaUseCase
+@inject EliminarPersonaUseCase EliminarPersonaUseCase
+@inject ModificarPersonaUseCase ModificarPersonaUseCase
+@inject ListarPersonasUseCase ListarPersonasUseCase
+<EliminarPersona @ref="eliminar"/>
+<PageTitle>Personas</PageTitle>
+<h1>Personas</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>DNI</th>
+            <th>NOMBRE</th>
+            <th>APELLIDO</th>
+            <th>EMAIL</th>
+            <th>TELEFONO</th>
+            <th>ACCION</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var p in _lista)
+        {
+            <tr>
+                <td>@p.ID</td>
+                <td>@p.DNI</td>
+                <td>@p.Nombre</td>
+                <td>@p.Apellido</td>
+                <td>@p.Email</td>
+                <td>@p.Telefono</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="()=>Editar(p)">Editar</button>
+                    <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(p)">Eliminar</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <button class="btn btn-primary" @onclick="Agregar">Agregar Persona</button>
+    <EditarPersona @ref="editar" OnPersonaAgregada="RefrescarLista" />
+</div>
+@code {
+    List<Persona> _lista=new List<Persona>();
+    protected override void OnInitialized()
+    {
+        _lista=ListarPersonasUseCase.Ejecutar();
+    }
+    EditarPersona editar=null!;
+    EliminarPersona eliminar=null!;
+    public void Agregar()
+    {
+        editar.Mostrar(true);
+        StateHasChanged();
+    }
+    public void Editar(Persona p)
+    {
+        editar.Mostrar(false,p);
+        StateHasChanged();
+    }
+    public void ConfirmarEliminacion(Persona p)
+    {
+        eliminar.Mensaje=$"¿Desea eliminar a la persona {p.Nombre} {p.Apellido}?";
+        eliminar.OnConfirmado=EventCallback.Factory.Create(this,()=>Eliminar(p));
+        eliminar.Mostrar(false);
+    }
+    private void Eliminar(Persona p)
+    {
+        try
+        {
+            EliminarPersonaUseCase.Ejecutar(p.ID.Value,Usuario.s_miId);
+        }
+        catch(FalloAutorizacionException e)
+        {
+            eliminar.Mensaje=e.Message;
+            eliminar.Mostrar(true);
+        }
+        catch(Exception e)
+        {
+            eliminar.Mensaje=e.Message;
+            eliminar.Mostrar(true);
+        }
+        _lista = ListarPersonasUseCase.Ejecutar();
+    }
+    void RefrescarLista()
+    {
+    _lista = ListarPersonasUseCase.Ejecutar();
+    StateHasChanged();
+    }
+}

@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 
 namespace CentroEventos.Aplicacion;
 
@@ -18,6 +19,10 @@ public class Persona
         Apellido = apellido;
         Email = email;
         Telefono = telefono;
+    }
+    public Persona(int? id = null, string? dni = null, string? nombre = null, string? apellido = null, string? email = null, string? telefono = null) : this(dni, nombre, apellido, email, telefono)
+    {
+        ID=id;
     }
     public override string ToString() => $"ID: {ID}, DNI: {DNI}, Nombre: {Nombre}, Apellido: {Apellido}, Email: {Email}, Telefono: {Telefono}";
 }

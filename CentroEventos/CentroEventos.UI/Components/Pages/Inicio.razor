@@ -2,30 +2,41 @@
 @rendermode InteractiveServer
 @inject AgregarUsuarioUseCase AgregarUsuarioUseCase
 @inject VerificarUsuarioUseCase verificarUsuarioUseCase
+@inject BuscarIdUseCase BuscarIdUseCase
 @inject NavigationManager Navegador
 <PageTitle>Inicio</PageTitle>
 @if(visible)
 {
     <div class="Inicio-Container">
-        <div class="Inicio-Datos">
+        <div class="Inicio-Datos @(sesion ? "login" : "register")">
             @if(sesion)
             {
-                <h1 class="Dato">Inicia Sesion</h1>
+                <h1 class="Dato">Iniciar Sesion</h1>
                 @if(!correcto){
                     <b>Contraseña o Email invalidos</b>
                 }
-                <input @ref="input_01" class="Dato" placeholder="Email"@bind="email" /><br>
-                <input class="Dato" placeholder="Contraseña"@bind="password" /><br>
+                <div class="Recuadros">   
+                    <label>Email</label>
+                    <input type="text" placeholder="Ingresar Email"@bind="email" /><br>
+                    <label>Contraseña</label>
+                    <input type="password" placeholder="Ingresar Contraseña"@bind="password" /><br>
+                </div>
                 <button class="Dato btn btn-primary" @onclick="SignIn">Iniciar Sesion</button>
                 <button class="Dato btn btn-secondary" @onclick="()=>Cambio(false)">Registrar</button>
             }
             else{
                 <h1 class="Dato">Registrar</h1>
-                <input class="Dato" placeholder="Nombre"@bind="nom" /><br>
-                <input class="Dato" placeholder="Apellido"@bind="ape" /><br>
-                <input class="Dato" placeholder="Email"@bind="email" /><br>
-                <input class="Dato" placeholder="Contraseña"@bind="password" /><br>
-                <button class="Dato btn btn-primary" @onclick="LogIn">Registrar</button>
+                @if(error)
+                {
+                    <b>@mensaje</b>
+                }
+                <div class="Recuadros">
+                    <input type="text"placeholder="Nombre"@bind="nom" /><br>
+                    <input type="text" placeholder="Apellido"@bind="ape" /><br>
+                    <input type="text" placeholder="Email"@bind="email" /><br>
+                    <input type="password" placeholder="Contraseña"@bind="password" /><br>
+                </div>
+                <button class="Dato btn btn-primary" @onclick="SignUp">Registrar</button>
                 <button class="Dato btn btn-secondary" @onclick="()=>Cambio(true)">Iniciar Sesion</button>
             }
         </div>
@@ -35,29 +46,43 @@
 @code{
     bool sesion=true;
     bool visible=true;
+    bool error=false;
     bool correcto = true;
     ElementReference input_01;
     string? nom;
     string? ape;
     string? email;
     string? password;
+    string? mensaje;
     public void SignIn()
     {
         if(verificarUsuarioUseCase.Ejecutar(new Usuario("none","none",email,password))){
             correcto = true;
+            Usuario.s_miId=BuscarIdUseCase.Ejecutar(email);
             visible=false;
             Navegador.NavigateTo("Personas");
         }
         else{
             correcto = false;
-            input_01.FocusAsync();
+            //input_01.FocusAsync();
+            StateHasChanged();
         }
     }
-    public void LogIn()
+    public void SignUp()
     {
         visible=false;
-        AgregarUsuarioUseCase.Ejecutar(new Usuario(nom,ape,email,password));
-        Navegador.NavigateTo("Personas");
+        try
+        {
+            AgregarUsuarioUseCase.Ejecutar(new Usuario(nom,ape,email,password));
+            Usuario.s_miId=BuscarIdUseCase.Ejecutar(email);
+            Navegador.NavigateTo("Personas");
+        }
+        catch(Exception e)
+        {
+            error=true;
+            mensaje=e.Message;
+            StateHasChanged();
+        }
     }
     public void Cambio(bool ok){
         sesion = ok;

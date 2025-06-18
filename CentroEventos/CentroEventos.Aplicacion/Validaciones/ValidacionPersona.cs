@@ -12,6 +12,7 @@ public class ValidacionPersona(IRepositorioPersona repo) : IValidadorPersona
         if (string.IsNullOrWhiteSpace(p.Apellido)) message += "El apellido de la persona esta ausente\n";
         if (string.IsNullOrWhiteSpace(p.DNI)) message += "El DNI de la persona esta ausente\n";
         if (string.IsNullOrWhiteSpace(p.Email)) message += "El Email de la persona esta ausente\n";
+        if (string.IsNullOrWhiteSpace(p.Telefono)) message += "El telefono de la persona esta ausente\n";
         return (string.IsNullOrWhiteSpace(message));
     }
     public bool ValidarDNIUnico(Persona p, out string message)

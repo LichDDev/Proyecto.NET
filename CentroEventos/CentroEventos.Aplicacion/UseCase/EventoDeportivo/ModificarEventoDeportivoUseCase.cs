@@ -29,7 +29,7 @@ public class ModificarEventoDeportivoUseCase(IRepositorioEventoDeportivo repoEve
         if (!v.ValidarResponsable(e,out message))
             throw new EntidadNotFoundException(message);
         //regla de negocio
-        if (DateTime.Now > e.FechaHoraInicio.AddHours(e.DuracionHoras))
+        if (DateTime.Now > DateTime.Parse(e.FechaHoraInicio).AddHours(e.DuracionHoras))
         {
             throw new OperacionInvalidaException("No se puede modificar un evento pasado");
         }   

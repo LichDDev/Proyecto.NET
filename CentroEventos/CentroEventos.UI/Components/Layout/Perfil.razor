@@ -1,0 +1,16 @@
+@if(visible)
+{
+    <div class="Inicio-Container">
+        <div class="Inicio-Datos">
+            <h1>Hola</h1>
+        </div>
+    </div>
+}
+@code{
+    bool visible=false;
+    public void Mostrar()
+    {
+        visible=true;
+        StateHasChanged();
+    }
+}

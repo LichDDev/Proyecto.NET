@@ -12,4 +12,5 @@ public interface IRepositorioUsuario
     bool ExisteEmail(string Email);
     bool BuscarPermiso(int usuarioID, Permiso permiso);
     bool VerificarContraseña(Usuario usuario);
+    int BuscarId(string mail);
 }

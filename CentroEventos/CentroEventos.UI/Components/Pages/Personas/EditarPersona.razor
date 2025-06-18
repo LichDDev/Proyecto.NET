@@ -1,0 +1,100 @@
+@rendermode InteractiveServer
+@inject AgregarPersonaUseCase AgregarPersonaUseCase
+@inject ModificarPersonaUseCase ModificarPersonaUseCase
+@if(visible)
+{
+    <div class="Contenedor">
+        <div class="Datos">
+            <h1>@(accion ? "Agregar Persona" : "Modificar Persona")</h1>
+            @if(!poseePermiso)
+            {
+                <pre>@mensaje</pre>
+
+            }
+            else if(error)
+            {
+                <pre>@mensaje</pre>
+            }
+            <div class="Salir">
+                <button class="bi bi-x-circle fs-2 d-flex align-items-center" aria-hidden="true" @onclick="Close"></button>
+            </div>
+            <div class="Recuadros">
+                <input type="text"placeholder="DNI"@bind="dni" /><br>
+                <input type="text"placeholder="Nombre"@bind="nom" /><br>
+                <input type="text" placeholder="Apellido"@bind="ape" /><br>
+                <input type="text" placeholder="Email"@bind="email" /><br>
+                <input type="text" placeholder="Telefono"@bind="tel" /><br>
+            </div>
+            <button class="btn btn-primary" @onclick="Editar">@(accion ? "Agregar Persona" : "Modificar Persona")</button>
+        </div>
+    </div>
+}
+@code
+{
+    string? dni;
+    string? nom;
+    string? ape;
+    string? email;
+    string? tel;
+    bool poseePermiso=true;
+    bool error=false;
+    bool accion;
+    string? mensaje;
+    private bool visible=false;
+    int? id;
+    public void Mostrar(bool accion,Persona? p=null)
+    {
+        visible=true;
+        this.accion = accion;
+        if (p is not null)
+        {
+            dni  = p.DNI;
+            nom  = p.Nombre;
+            ape  = p.Apellido;
+            email = p.Email;
+            tel  = p.Telefono;
+            id=p.ID;
+        }
+        else
+        {
+            dni = nom = ape = email = tel = null;
+            id = null;
+        }
+        StateHasChanged();
+    }
+    [Parameter] public EventCallback OnPersonaAgregada { get; set; }
+
+    void Editar()
+    {
+        try
+        {
+            if(accion)
+            {
+                AgregarPersonaUseCase.Ejecutar(new Persona(dni,nom,ape,email,tel),Usuario.s_miId);
+            }
+            else
+            {
+                ModificarPersonaUseCase.Ejecutar(new Persona(id,dni,nom,ape,email,tel),Usuario.s_miId);
+            }
+            StateHasChanged();
+            OnPersonaAgregada.InvokeAsync(); 
+            visible = false;
+        }
+        catch(FalloAutorizacionException e)
+        {
+            poseePermiso=false;
+            mensaje=e.Message;
+        }
+        catch(Exception e)
+        {
+            error=true;
+            mensaje=e.Message;
+        }
+    }
+    public void Close()
+    {
+        visible=false;
+        poseePermiso=true;
+        error=false;
+    }
+}

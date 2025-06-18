@@ -1,0 +1,88 @@
+@page "/Reservas"
+@rendermode InteractiveServer
+@inject AgregarReservaUseCase AgregarReservaUseCase
+@inject EliminarReservaUseCase EliminarReservaUseCase
+@inject ModificarReservaUseCase ModificarReservaUseCase
+@inject ListarReservasUseCase ListarReservasUseCase
+<EliminarReserva @ref="eliminar"/>
+<PageTitle>Reservas</PageTitle>
+<h1>Reservas</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>PERSONA ID</th>
+            <th>EVENTO ID</th>
+            <th>FECHA RESERVA</th>
+            <th>ESTADO ASISTENCIA</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var r in _lista)
+        {
+            <tr>
+                <td>@r.ID</td>
+                <td>@r.PersonaId</td>
+                <td>@r.EventoDeportivoId</td>
+                <td>@r.FechaAltaReserva</td>
+                <td>@r.EstadoAsistencia</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="()=>Editar(r)">Editar</button>
+                    <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(r)">Eliminar</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div>
+    <button class="btn btn-primary" @onclick="Agregar">Agregar Reserva</button>
+    <EditarReserva @ref="editar" OnReservaAgregada="RefrescarLista" />
+</div>
+@code {
+    List<Reserva> _lista=new List<Reserva>();
+    protected override void OnInitialized()
+    {
+        _lista=ListarReservasUseCase.Ejecutar();
+    }
+    EditarReserva editar=null!;
+    EliminarReserva eliminar=null!;
+    public void Agregar()
+    {
+        editar.Mostrar(true);
+        StateHasChanged();
+    }
+    public void Editar(Reserva r)
+    {
+        editar.Mostrar(false,r);
+        StateHasChanged();
+    }
+    public void ConfirmarEliminacion(Reserva r)
+    {
+        eliminar.Mensaje=$"¿Desea eliminar la reserva {r.ID}?";
+        eliminar.OnConfirmado=EventCallback.Factory.Create(this,()=>Eliminar(r));
+        eliminar.Mostrar(false);
+    }
+    private void Eliminar(Reserva r)
+    {
+        try
+        {
+            EliminarReservaUseCase.Ejecutar(r.ID,Usuario.s_miId);
+        }
+        catch(FalloAutorizacionException e)
+        {
+            eliminar.Mensaje=e.Message;
+            eliminar.Mostrar(true);
+        }
+        catch(Exception e)
+        {
+            eliminar.Mensaje=e.Message;
+            eliminar.Mostrar(true);
+        }
+        _lista = ListarReservasUseCase.Ejecutar();
+    }
+    void RefrescarLista()
+    {
+    _lista = ListarReservasUseCase.Ejecutar();
+    StateHasChanged();
+    }
+}

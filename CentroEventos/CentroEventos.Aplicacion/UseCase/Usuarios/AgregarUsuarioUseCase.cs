@@ -9,5 +9,7 @@ public class AgregarUsuarioUseCase (IRepositorioUsuario repo,IValidadorUsuario v
         if (!v.ValidarDatosAusentes(usuario, out string message))
             throw new ValidacionException(message);
         repo.AgregarUsuario(usuario);
+        if (!v.ValidarEmailUnico(usuario,out message))
+            throw new DuplicadoException(message);
     }
 }
