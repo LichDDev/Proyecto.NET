@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿
+@inherits LayoutComponentBase
 
 <div class="page">
     <div class="sidebar">
@@ -10,7 +11,8 @@
             <div class="container-fluid">
                 <a class="navbar-brand" href="">Cerrar Sesion</a>
             </div>
-            <button @onclick="Abrir"></button>
+            <BotonPerfil/>
+
         </div>
 
         <article class="content px-4">
@@ -24,10 +26,3 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
-
-@code{
-    public void Abrir()
-    {
-        Console.WriteLine("se abre");
-    }
-}

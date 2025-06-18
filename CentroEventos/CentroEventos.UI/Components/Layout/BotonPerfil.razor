@@ -1,0 +1,31 @@
+﻿@rendermode InteractiveServer
+    @if (ok)
+    {
+      <div style="
+          position:fixed;
+          top:0; left:0; right:0; bottom:0;
+          background:rgba(0,0,0,0.6);
+          display:flex;
+          align-items:center;
+          justify-content:center;
+        ">
+        <div style="
+            background:#fff;
+            padding:2rem;
+            border-radius:0.5rem;
+            box-shadow:0 0 10px rgba(0,0,0,0.3);
+          ">
+          <h1>¡Hola!</h1>
+        </div>
+      </div>
+    }
+    <button @onclick="()=>Abrir()"></button>
+
+@code{
+    bool ok = false;
+    public void Abrir()
+    {
+        ok= !ok;
+        StateHasChanged();
+    }
+}
