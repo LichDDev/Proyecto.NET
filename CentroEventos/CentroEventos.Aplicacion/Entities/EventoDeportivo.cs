@@ -23,5 +23,9 @@ public class EventoDeportivo
     {
         ID = id;
     }
+    public EventoDeportivo(int id)
+    {
+        ID = id;
+    }
     public override string ToString() => $"ID: {ID}, Nombre: {Nombre}, Descripción: {Descripcion}, Fecha de inicio: {FechaHoraInicio}, Cupo máximo: {CupoMaximo}, ID del responsable: {ResponsableId}";
 }

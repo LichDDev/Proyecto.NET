@@ -4,7 +4,7 @@
 @inject EliminarPersonaUseCase EliminarPersonaUseCase
 @inject ModificarPersonaUseCase ModificarPersonaUseCase
 @inject ListarPersonasUseCase ListarPersonasUseCase
-<EliminarPersona @ref="eliminar"/>
+<EliminarPersona @ref="eliminar" OnConfirmado="()=>Eliminar(PerElim ?? new Persona(0))" Mensaje="@msg"/>
 <PageTitle>Personas</PageTitle>
 <h1>Personas</h1>
 <table class="table">
@@ -50,6 +50,8 @@
     }
     EditarPersona editar=null!;
     EliminarPersona eliminar=null!;
+    Persona? PerElim {get;set;}
+    string msg {get;set;} = "";
     public void Agregar()
     {
         editar.Mostrar(true);
@@ -62,24 +64,24 @@
     }
     public void ConfirmarEliminacion(Persona p)
     {
-        eliminar.Mensaje=$"¿Desea eliminar a la persona {p.Nombre} {p.Apellido}?";
-        eliminar.OnConfirmado=EventCallback.Factory.Create(this,()=>Eliminar(p));
+        msg =$"¿Desea eliminar a la persona {p.Nombre} {p.Apellido}?";
+        PerElim = p;
         eliminar.Mostrar(false);
     }
     private void Eliminar(Persona p)
     {
         try
         {
-            EliminarPersonaUseCase.Ejecutar(p.ID.Value,Usuario.s_miId);
+            EliminarPersonaUseCase.Ejecutar(Convert.ToInt32(p.ID),Usuario.s_miId);
         }
         catch(FalloAutorizacionException e)
         {
-            eliminar.Mensaje=e.Message;
+            msg=e.Message;
             eliminar.Mostrar(true);
         }
         catch(Exception e)
         {
-            eliminar.Mensaje=e.Message;
+            msg=e.Message;
             eliminar.Mostrar(true);
         }
         _lista = ListarPersonasUseCase.Ejecutar();

@@ -5,7 +5,7 @@
 @inject ModificarPersonaUseCase ModificarEventoDeportivoUseCase
 @inject ListarEventosDeportivosUseCase ListarEventosDeportivosUseCase
 @inject ListarEventosConCupoDisponibleUseCase ListarEventosConCupoDisponibleUseCase
-<EliminarEvento @ref="eliminar"/>
+<EliminarEvento @ref="eliminar" Mensaje="@msg" OnConfirmado="()=>Eliminar(EvenElim?? new EventoDeportivo(0))"/>
 <PageTitle>Eventos</PageTitle>
 <h1>Eventos</h1>
 <table class="table">
@@ -19,7 +19,7 @@
             <th>CUPO MAXIMO</th>
             <th>RESPONSABLE ID</th>
             <td>
-                <button class="btn btn-primary" @onclick="()=>tipoDeLista=!tipoDeLista">@(tipoDeLista ? "Solo eventos con cupos" : "Todos los eventos")</button>
+                <button class="btn btn-primary" @onclick="()=> OnInitialized()">@(tipoDeLista ? "Solo eventos con cupos" : "Todos los eventos")</button>
             </td>
         </tr>
     </thead>
@@ -47,10 +47,11 @@
     <EditarEvento @ref="editar" OnEventoAgregado="RefrescarLista" />
 </div>
 @code {
-    bool tipoDeLista=true;
+    bool tipoDeLista=false;
     List<EventoDeportivo> _lista=new List<EventoDeportivo>();
     protected override void OnInitialized()
     {
+        tipoDeLista = !tipoDeLista;
         if(tipoDeLista)
             _lista=ListarEventosDeportivosUseCase.Ejecutar();
         else
@@ -58,6 +59,8 @@
     }
     EditarEvento editar=null!;
     EliminarEvento eliminar=null!;
+    string msg {get;set;} ="";
+    EventoDeportivo? EvenElim {get;set;}
     public void Agregar()
     {
         editar.Mostrar(true);
@@ -70,8 +73,8 @@
     }
     public void ConfirmarEliminacion(EventoDeportivo e)
     {
-        eliminar.Mensaje=$"¿Desea eliminar el evento {e.Nombre}?";
-        eliminar.OnConfirmado=EventCallback.Factory.Create(this,()=>Eliminar(e));
+        msg=$"¿Desea eliminar el evento {e.Nombre}?";
+        EvenElim = e;
         eliminar.Mostrar(false);
     }
     private void Eliminar(EventoDeportivo e)
@@ -82,12 +85,12 @@
         }
         catch(FalloAutorizacionException ex)
         {
-            eliminar.Mensaje=ex.Message;
+            msg=ex.Message;
             eliminar.Mostrar(true);
         }
         catch(Exception ex)
         {
-            eliminar.Mensaje=ex.Message;
+            msg=ex.Message;
             eliminar.Mostrar(true);
         }
         _lista = ListarEventosDeportivosUseCase.Ejecutar();

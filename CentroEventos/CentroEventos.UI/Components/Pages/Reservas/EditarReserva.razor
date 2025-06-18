@@ -68,11 +68,11 @@
         {
             if(accion)
             {
-                AgregarReservaUseCase.Ejecutar(new Reserva(perId.Value,evId.Value,fecha,estado),Usuario.s_miId);
+                AgregarReservaUseCase.Ejecutar(new Reserva(Convert.ToInt32(perId),Convert.ToInt32(evId),fecha,estado),Usuario.s_miId);
             }
             else
             {
-                ModificarReservaUseCase.Ejecutar(new Reserva(id,perId.Value,evId.Value,fecha,estado),Usuario.s_miId);
+                ModificarReservaUseCase.Ejecutar(new Reserva(id,Convert.ToInt32(perId),Convert.ToInt32(evId),fecha,estado),Usuario.s_miId);
             }
             StateHasChanged();
             OnReservaAgregada.InvokeAsync(); 

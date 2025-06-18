@@ -4,7 +4,7 @@
 @inject EliminarReservaUseCase EliminarReservaUseCase
 @inject ModificarReservaUseCase ModificarReservaUseCase
 @inject ListarReservasUseCase ListarReservasUseCase
-<EliminarReserva @ref="eliminar"/>
+<EliminarReserva @ref="eliminar" Mensaje="@msg" OnConfirmado="()=>Eliminar(ResElim ?? new Reserva(0,0,null,null){ ID = 0})"/>
 <PageTitle>Reservas</PageTitle>
 <h1>Reservas</h1>
 <table class="table">
@@ -46,6 +46,8 @@
     }
     EditarReserva editar=null!;
     EliminarReserva eliminar=null!;
+    Reserva? ResElim {get;set;}
+    string msg {get;set;} = "";
     public void Agregar()
     {
         editar.Mostrar(true);
@@ -58,8 +60,8 @@
     }
     public void ConfirmarEliminacion(Reserva r)
     {
-        eliminar.Mensaje=$"¿Desea eliminar la reserva {r.ID}?";
-        eliminar.OnConfirmado=EventCallback.Factory.Create(this,()=>Eliminar(r));
+        msg =$"¿Desea eliminar la reserva {r.ID}?";
+        ResElim =r;
         eliminar.Mostrar(false);
     }
     private void Eliminar(Reserva r)
@@ -70,12 +72,12 @@
         }
         catch(FalloAutorizacionException e)
         {
-            eliminar.Mensaje=e.Message;
+            msg=e.Message;
             eliminar.Mostrar(true);
         }
         catch(Exception e)
         {
-            eliminar.Mensaje=e.Message;
+            msg=e.Message;
             eliminar.Mostrar(true);
         }
         _lista = ListarReservasUseCase.Ejecutar();

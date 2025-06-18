@@ -74,11 +74,11 @@
         {
             if(accion)
             {
-                AgregarEventoDeportivoUseCase.Ejecutar(new EventoDeportivo(nom,desc,fecha,dur.Value,cupo.Value,respId.Value),Usuario.s_miId);
+                AgregarEventoDeportivoUseCase.Ejecutar(new EventoDeportivo(nom,desc,fecha,Convert.ToDouble(dur),Convert.ToInt32(cupo),Convert.ToInt32(respId)),Usuario.s_miId);
             }
             else
             {
-                ModificarEventoDeportivoUseCase.Ejecutar(new EventoDeportivo(id,nom,desc,fecha,dur.Value,cupo.Value,respId.Value),Usuario.s_miId);
+                ModificarEventoDeportivoUseCase.Ejecutar(new EventoDeportivo(nom,desc,fecha,Convert.ToDouble(dur),Convert.ToInt32(cupo),Convert.ToInt32(respId)),Usuario.s_miId);
             }
             StateHasChanged();
             OnEventoAgregado.InvokeAsync(); 

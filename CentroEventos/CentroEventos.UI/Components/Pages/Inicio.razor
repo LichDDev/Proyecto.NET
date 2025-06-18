@@ -34,7 +34,7 @@
                     <input type="text"placeholder="Nombre"@bind="nom" /><br>
                     <input type="text" placeholder="Apellido"@bind="ape" /><br>
                     <input type="text" placeholder="Email"@bind="email" /><br>
-                    <input type="password" placeholder="Contraseña"@bind="password" /><br>
+                    <input type="text" placeholder="Contraseña"@bind="password" /><br>
                 </div>
                 <button class="Dato btn btn-primary" @onclick="SignUp">Registrar</button>
                 <button class="Dato btn btn-secondary" @onclick="()=>Cambio(true)">Iniciar Sesion</button>
@@ -48,23 +48,21 @@
     bool visible=true;
     bool error=false;
     bool correcto = true;
-    ElementReference input_01;
     string? nom;
     string? ape;
-    string? email;
+    string? email ;
     string? password;
     string? mensaje;
     public void SignIn()
     {
         if(verificarUsuarioUseCase.Ejecutar(new Usuario("none","none",email,password))){
             correcto = true;
-            Usuario.s_miId=BuscarIdUseCase.Ejecutar(email);
+            Usuario.s_miId= BuscarIdUseCase.Ejecutar(email!= null? email:"none");
             visible=false;
             Navegador.NavigateTo("Personas");
         }
         else{
             correcto = false;
-            //input_01.FocusAsync();
             StateHasChanged();
         }
     }
@@ -74,7 +72,7 @@
         try
         {
             AgregarUsuarioUseCase.Ejecutar(new Usuario(nom,ape,email,password));
-            Usuario.s_miId=BuscarIdUseCase.Ejecutar(email);
+            Usuario.s_miId=BuscarIdUseCase.Ejecutar(email == null? "": email);
             Navegador.NavigateTo("Personas");
         }
         catch(Exception e)
