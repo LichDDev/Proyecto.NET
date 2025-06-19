@@ -14,9 +14,10 @@ public class RepositorioUsuario() : IRepositorioUsuario
         u.Contraseña = HashPassword(u.Contraseña != null ? u.Contraseña : "");
         context.Usuarios.Add(u);
         context.SaveChanges(); // Aquí se asigna el ID
+        
         if (u.ID == 1)
         {
-            OtorgarPermisos(u.ID);
+            OtorgarPermisos(u.ID, context);
             context.SaveChanges(); // Guardar los permisos asignados
         }
     }
@@ -48,7 +49,7 @@ public class RepositorioUsuario() : IRepositorioUsuario
             usuarioModificar.Nombre = u.Nombre;
             usuarioModificar.Apellido = u.Apellido;
             usuarioModificar.Email = u.Email;
-            usuarioModificar.Contraseña = u.Contraseña;
+            usuarioModificar.Contraseña = HashPassword(u.Contraseña);
             context.SaveChanges();
             return true;
         }
@@ -101,23 +102,18 @@ public class RepositorioUsuario() : IRepositorioUsuario
         // Convertir a string hexadecimal
         return Convert.ToHexString(hashBytes); // .NET 5+
     }
-    private void OtorgarPermisos(int id)
+    private void OtorgarPermisos(int id,CentroDeportivoContext context)
     {
-        using var context = new CentroDeportivoContext();
         foreach (Permiso item in Enum.GetValues(typeof(Permiso)))
         {
             context.Permitidos.Add(new Permitido(item, id));
-            context.SaveChanges();
         }
-
+        context.SaveChanges();
     }
-    public int BuscarId(string mail)
+    public Usuario? BuscarUsuario(string mail)
     {
         using var context = new CentroDeportivoContext();
         var usuario = context.Usuarios.Where(u => u.Email == mail).SingleOrDefault();
-        if (usuario != null)
-            return usuario.ID;
-        else
-            return 0;
+        return usuario;
     }
 }

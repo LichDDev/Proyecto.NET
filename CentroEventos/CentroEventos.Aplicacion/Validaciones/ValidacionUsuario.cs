@@ -17,7 +17,7 @@ public class ValidacionUsuario(IRepositorioUsuario repo) : IValidadorUsuario
     public bool ValidarEmailUnico(Usuario u, out string message)
     {
         message = "";
-        if (u.Email != null && !repo.ExisteEmail(u.Email)) message += "Ya existe una usuario con ese Email\n"; 
+        if (u.Email != null && repo.ExisteEmail(u.Email)) message += "Ya existe una usuario con ese Email\n"; 
         return (string.IsNullOrWhiteSpace(message));
     }
 }

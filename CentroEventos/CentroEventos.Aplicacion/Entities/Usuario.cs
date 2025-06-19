@@ -4,7 +4,7 @@ namespace CentroEventos.Aplicacion;
 
 public class Usuario
 {
-    public static int s_miId;
+    public static Usuario? s_Actual;
     public int ID { get; set; }
     public string? Nombre { get; set; }
     public string? Apellido { get; set; }
@@ -18,4 +18,12 @@ public class Usuario
         Email = email;
         Contraseña = contraseña;
     }
+    public Usuario(int id, string? nombre, string? apellido, string? email, string? contraseña) : this(nombre, apellido, email, contraseña)
+    {
+        ID = id;
+    }
+    public Usuario(int id)
+    {
+        ID = id;
+    }   
 }
