@@ -54,6 +54,7 @@
     protected override void OnInitialized()
     {
         _lista=ListarPersonasUseCase.Ejecutar();
+        StateHasChanged();
     }
     EditarPersona editar=null!;
     EliminarEntidad eliminar=null!;

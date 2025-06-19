@@ -110,22 +110,30 @@ public class RepositorioUsuario() : IRepositorioUsuario
         }
         context.SaveChanges();
     }
-    public void DarPermiso(int usuarioId, Permiso permiso)
+    public void EditarPermisos(int usuarioId, List<PermisoCheckbox> permisos)
     {
         using var context = new CentroDeportivoContext();
-        if (!BuscarPermiso(usuarioId, permiso))
+
+        var permisosActuales = context.Permitidos.Where(p => p.UsuarioId == usuarioId).ToList();
+
+        var permisosSeleccionados = permisos.Where(p => p.Seleccionado).Select(p => p.Valor).ToHashSet();
+
+        // puse los seleccionados que faltan
+        foreach (var permiso in permisosSeleccionados)
         {
-            context.Permitidos.Add(new Permitido(permiso, usuarioId));
+            if (!permisosActuales.Any(p => p.Permiso == permiso))
+            {
+                context.Permitidos.Add(new Permitido(permiso, usuarioId));
+            }
         }
-        context.SaveChanges();
-    }
-    public void RetirarPermiso(int usuarioId, Permiso permiso)
-    {
-        using var context = new CentroDeportivoContext();
-        var user = context.Permitidos.Where(r => r.UsuarioId == usuarioId && r.Permiso == permiso).SingleOrDefault();
-        if (user != null && BuscarPermiso(usuarioId, permiso))
+
+        // saque los permisos que no se seleccionaron
+        foreach (var permisoActual in permisosActuales)
         {
-            context.Permitidos.Remove(user);
+            if (!permisosSeleccionados.Contains(permisoActual.Permiso))
+            {
+                context.Permitidos.Remove(permisoActual);
+            }
         }
         context.SaveChanges();
     }
@@ -135,10 +143,12 @@ public class RepositorioUsuario() : IRepositorioUsuario
         var usuario = context.Usuarios.Where(u => u.Email == mail).SingleOrDefault();
         return usuario;
     }
-    public List<Permiso> ListarPermisos(int idUsuario)
+    public List<PermisoCheckbox> ListarPermisos(int idUsuario)
     {
         using var context = new CentroDeportivoContext();
-        var permisos = context.Permitidos.Where(r=>r.UsuarioId == idUsuario).Select(a=>a.Permiso).ToList();
-        return permisos;
+        var permisos = context.Permitidos.Where(r=>r.UsuarioId == idUsuario).Select(a=>a.Permiso).ToHashSet();
+        var todosLosPermisos = Enum.GetValues(typeof(Permiso)).Cast<Permiso>()
+        .Select(p => new PermisoCheckbox{Valor = p,Seleccionado = permisos.Contains(p)}).ToList();
+        return todosLosPermisos;
     }
 }

@@ -12,8 +12,7 @@ public interface IRepositorioUsuario
     bool ExisteEmail(string Email);
     bool BuscarPermiso(int usuarioID, Permiso permiso);
     bool VerificarContraseña(Usuario usuario);
-    void DarPermiso(int usuarioID, Permiso permiso);
-    void RetirarPermiso(int usuarioID, Permiso permiso);
-    List<Permiso> ListarPermisos(int usuarioId);
+    void EditarPermisos(int usuarioID, List<PermisoCheckbox>permiso);
+    List<PermisoCheckbox> ListarPermisos(int idUsuario);
     Usuario? BuscarUsuario(string mail);
 }

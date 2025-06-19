@@ -29,16 +29,16 @@
                 <td>@u.Email</td>
                 <td>@u.Contraseña</td>
                 <td>
-                    @if(true || u.ID != (Usuario.s_Actual!=null ? Usuario.s_Actual.ID:0) || u.ID!=1) // sacar el true luego
+                    @if(!(u.ID==1&&Usuario.s_Actual.ID!=1))
                     {
                         @if(servicioAutorizacion.PoseeElPermiso(Usuario.s_Actual != null? Usuario.s_Actual.ID:0 ,Permiso.UsuarioModificacion)){
                             <button class="btn btn-primary" @onclick="()=>Editar(u)">Editar</button>
-                            <button  class="btn btn-primary" @onclick="()=>MostrarPermisos(u)">Permisos</button>
+                            <button  class="btn btn-success" @onclick="()=>MostrarPermisos(u)">Permisos</button>
                             <EditarPermisos @ref="editarPermisos"/>
                         }
-                        @if(servicioAutorizacion.PoseeElPermiso(Usuario.s_Actual != null? Usuario.s_Actual.ID:0 ,Permiso.UsuarioBaja)){
-                            <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(u)">Eliminar</button>
-                        }
+                    }
+                    @if(((u.ID!=1)&&(u.ID!=Usuario.s_Actual.ID))&&(servicioAutorizacion.PoseeElPermiso(Usuario.s_Actual != null? Usuario.s_Actual.ID:0 ,Permiso.UsuarioBaja))){
+                        <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(u)">Eliminar</button>
                     }
                 </td>
             </tr>

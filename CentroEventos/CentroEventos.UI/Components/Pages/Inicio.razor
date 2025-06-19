@@ -53,12 +53,13 @@
     string? email ;
     string? password;
     string? mensaje;
-    public void SignIn()
+    public async Task SignIn()
     {
         if(verificarUsuarioUseCase.Ejecutar(new Usuario("none","none",email,password))){
             correcto = true;
             Usuario.s_Actual= BuscarUsuarioUseCase.Ejecutar(email!= null? email:"none");
             visible=false;
+            await Task.Delay(50);
             Navegador.NavigateTo("/Personas");
         }
         else{
@@ -67,13 +68,14 @@
         }
     }
     Usuario? user;
-    public void SignUp()
+    public async Task SignUp()
     {
         try
         {
             AgregarUsuarioUseCase.Ejecutar(user=new Usuario(nom,ape,email,password));
             Usuario.s_Actual=BuscarUsuarioUseCase.Ejecutar(email ?? "none");
             visible=false;
+            await Task.Delay(50);
             Navegador.NavigateTo("/Personas");
         }
         catch(Exception e)

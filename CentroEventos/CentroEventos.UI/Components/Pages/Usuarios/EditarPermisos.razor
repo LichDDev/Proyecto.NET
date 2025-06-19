@@ -1,54 +1,47 @@
 ﻿@rendermode InteractiveServer
-@inject ListarPermisosUseCase listarPermisosUseCase
-@inject RetirarPermisoUseCase retirarPermisoUseCase
-<EliminarEntidad @ref="eliminar" OnConfirmado="()=>Eliminar(idUsuario,PerElim)" Mensaje="@msg"/>
+@inject ListarPermisosUseCase  ListarPermisosUseCase
+@inject EditarPermisosUseCase EditarPermisosUseCase
 @if(visible){
     <div class="Inicio-Container">
         <div class="Inicio-Datos">
-            <thead>
-                <th>Permisos</th>
-                <div class="Salir">
-                    <button class="bi bi-x-circle fs-2 d-flex align-items-center" aria-hidden="true" @onclick="Close"></button>
-                </div>
-            </thead>
+            <h2>Permisos</h2>
             <tbody>
-                @foreach(var per in permisos){
-                    <button @onclick="()=>ConfirmarEliminacion(per)">@per</button>
-                }
+                <div class="lista">
+                    @foreach(var per in PermisosDisponibles)
+                    {
+                        <div class="permiso-item">
+                            <input type="checkbox" id="perm_per.Valor" @bind="per.Seleccionado"/>
+                            <label for="=perm_@per.Valor">@per.Valor</label>
+                        </div>
+                    }
+                </div>
+                <div class="botones">
+                    <button class="btn btn-primary" @onclick="GuardarCambios">Guardar</button>
+                    <button class="btn btn-secondary" @onclick="Close">Cancelar</button>
+                </div>
             </tbody>
         </div>
     </div>
 }
 @code {
     bool visible = false;
-    EliminarEntidad eliminar = null!;
-    public List<Permiso> permisos = new List<Permiso>(); 
+    List<PermisoCheckbox> PermisosDisponibles=null!;
+
     int idUsuario;
-    Permiso PerElim;
-    string msg ="";
     public void Mostrar(bool ok, int idUsuario){
+        PermisosDisponibles=ListarPermisosUseCase.Ejecutar(idUsuario);
         visible = ok;
         this.idUsuario = idUsuario;
-        permisos = listarPermisosUseCase.Ejecutar(idUsuario);
         StateHasChanged();
     }
-    protected override void OnInitialized()
+    public void GuardarCambios()
     {
-        permisos = listarPermisosUseCase.Ejecutar(idUsuario);
-    }
-    public void ConfirmarEliminacion(Permiso u)
-    {
-        msg =$"¿Desea eliminar el Permiso {u}?";
-        PerElim = u;
+        EditarPermisosUseCase.Ejecutar(idUsuario,PermisosDisponibles);
         visible = false;
-        eliminar.Mostrar(false);
-    }
-    public void Eliminar(int id,Permiso permiso){
-        retirarPermisoUseCase.Ejecutar(id,permiso);
-        permisos = listarPermisosUseCase.Ejecutar(id);
-
+        StateHasChanged();
     }
     public void Close(){
         visible = false;
+        StateHasChanged();
     }
 }   
