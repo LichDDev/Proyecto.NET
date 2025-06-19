@@ -21,7 +21,7 @@ public class ValidacionEventoDeportivo(IRepositorioPersona repo) : IValidadorEve
     public bool ValidarFechaDeInicio(EventoDeportivo evento,out string message)
     {
         message = "";
-        if (DateTime.Parse(evento.FechaHoraInicio) < DateTime.Now)
+        if (DateTime.Parse(evento.FechaHoraInicio ?? "0/0/0000") < DateTime.Now)
             message += "La fecha de inicio no puede ser en el pasado";
         return (string.IsNullOrWhiteSpace(message));
     }

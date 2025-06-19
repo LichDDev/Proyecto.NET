@@ -13,10 +13,18 @@ public class ModificarReservaUseCase (IRepositorioReserva repoRes,IServicioAutor
         //validaciones
         if (!v.ValidarEntidadesExistentes(r, out message))
             throw new EntidadNotFoundException(message);
-        if (!v.ValidarReservaUnica(r, out message))
-            throw new DuplicadoException(message);
-        if (!v.ValidarCuposDisponibles(r, out message))
-            throw new CupoExcedidoException(message);
+        var res = repoRes.ListarReservas().Where(a=> a.ID == r.ID).SingleOrDefault();
+        //verificamos solo cuando la reserva sea a nombre de otra persona
+        if (res != null && (res.PersonaId != r.PersonaId && r.EventoDeportivoId == res.EventoDeportivoId || res.PersonaId == r.PersonaId && r.EventoDeportivoId != res.EventoDeportivoId ))
+        {
+            if (!v.ValidarReservaUnica(r, out message))
+                throw new DuplicadoException(message);
+        }
+        if (res != null && r.EventoDeportivoId != res.EventoDeportivoId)
+        {
+            if (!v.ValidarCuposDisponibles(r, out message))
+               throw new CupoExcedidoException(message);   
+        }  
         if (!repoRes.ModificarReserva(r))
             throw new EntidadNotFoundException("No se encontró una persona con esa ID");
     }

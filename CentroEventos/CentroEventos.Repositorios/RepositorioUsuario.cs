@@ -14,7 +14,7 @@ public class RepositorioUsuario() : IRepositorioUsuario
         u.Contraseña = HashPassword(u.Contraseña != null ? u.Contraseña : "");
         context.Usuarios.Add(u);
         context.SaveChanges(); // Aquí se asigna el ID
-        
+
         if (u.ID == 1)
         {
             OtorgarPermisos(u.ID, context);
@@ -49,7 +49,7 @@ public class RepositorioUsuario() : IRepositorioUsuario
             usuarioModificar.Nombre = u.Nombre;
             usuarioModificar.Apellido = u.Apellido;
             usuarioModificar.Email = u.Email;
-            usuarioModificar.Contraseña = HashPassword(u.Contraseña);
+            usuarioModificar.Contraseña = HashPassword(u.Contraseña ?? "");
             context.SaveChanges();
             return true;
         }
@@ -102,11 +102,30 @@ public class RepositorioUsuario() : IRepositorioUsuario
         // Convertir a string hexadecimal
         return Convert.ToHexString(hashBytes); // .NET 5+
     }
-    private void OtorgarPermisos(int id,CentroDeportivoContext context)
+    private void OtorgarPermisos(int id, CentroDeportivoContext context)
     {
         foreach (Permiso item in Enum.GetValues(typeof(Permiso)))
         {
             context.Permitidos.Add(new Permitido(item, id));
+        }
+        context.SaveChanges();
+    }
+    public void DarPermiso(int usuarioId, Permiso permiso)
+    {
+        using var context = new CentroDeportivoContext();
+        if (!BuscarPermiso(usuarioId, permiso))
+        {
+            context.Permitidos.Add(new Permitido(permiso, usuarioId));
+        }
+        context.SaveChanges();
+    }
+    public void RetirarPermiso(int usuarioId, Permiso permiso)
+    {
+        using var context = new CentroDeportivoContext();
+        var user = context.Permitidos.Where(r => r.UsuarioId == usuarioId && r.Permiso == permiso).SingleOrDefault();
+        if (user != null && BuscarPermiso(usuarioId, permiso))
+        {
+            context.Permitidos.Remove(user);
         }
         context.SaveChanges();
     }
@@ -115,5 +134,11 @@ public class RepositorioUsuario() : IRepositorioUsuario
         using var context = new CentroDeportivoContext();
         var usuario = context.Usuarios.Where(u => u.Email == mail).SingleOrDefault();
         return usuario;
+    }
+    public List<Permiso> ListarPermisos(int idUsuario)
+    {
+        using var context = new CentroDeportivoContext();
+        var permisos = context.Permitidos.Where(r=>r.UsuarioId == idUsuario).Select(a=>a.Permiso).ToList();
+        return permisos;
     }
 }

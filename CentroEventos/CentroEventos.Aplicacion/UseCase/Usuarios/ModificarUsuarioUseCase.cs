@@ -12,8 +12,13 @@ public class ModificarUsuarioUseCase(IRepositorioUsuario repo,IServicioAutorizac
         }
         if (!v.ValidarDatosAusentes(usuario, out string message))
             throw new ValidacionException(message);
-        if (!v.ValidarEmailUnico(usuario, out message))
-            throw new DuplicadoException(message);
+
+        var user = repo.BuscarUsuario(usuario.Email ?? "");
+        if (user != null && user.ID != usuario.ID)
+        {
+            if (!v.ValidarEmailUnico(usuario, out message))
+                throw new DuplicadoException(message);   
+        }
         if (!repo.ModificarUsuario(usuario))
             throw new EntidadNotFoundException("no existe El usuario");
     }
