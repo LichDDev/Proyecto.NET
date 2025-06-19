@@ -3,6 +3,7 @@
 @inject AgregarUsuarioUseCase AgregarUsuarioUseCase
 @inject EliminarUsuarioUseCase EliminarUsuarioUseCase
 @inject ModificarUsuarioUseCase ModificarUsuarioUseCase
+@inject ServicioAutorizacion servicioAutorizacion
 @inject ListarUsuariosUseCase ListarUsuariosUseCase
 <EliminarEntidad @ref="eliminar" OnConfirmado="()=>Eliminar(UserElim ?? new Usuario(0))" Mensaje="@msg"/>
 <PageTitle>Usuarios</PageTitle>
@@ -15,6 +16,7 @@
             <th>APELLIDO</th>
             <th>EMAIL</th>
             <th>CONTRASEÑA</th>
+            <th>Accion</th>
         </tr>
     </thead>
     <tbody>
@@ -27,10 +29,16 @@
                 <td>@u.Email</td>
                 <td>@u.Contraseña</td>
                 <td>
-                    @if(u.ID != Usuario.s_Actual.ID || u.ID!=1)
+                    @if(true || u.ID != (Usuario.s_Actual!=null ? Usuario.s_Actual.ID:0) || u.ID!=1)
                     {
-                        <button class="btn btn-primary" @onclick="()=>Editar(u)">Editar</button>
-                        <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(u)">Eliminar</button>
+                        @if(servicioAutorizacion.PoseeElPermiso(Usuario.s_Actual != null? Usuario.s_Actual.ID:0 ,Permiso.UsuarioModificacion)){
+                            <button class="btn btn-primary" @onclick="()=>Editar(u)">Editar</button>
+                            <button  class="btn btn-primary" @onclick="()=>MostrarPermisos(u)">Permisos</button>
+                            <EditarPermisos @ref="editarPermisos"/>
+                        }
+                        @if(servicioAutorizacion.PoseeElPermiso(Usuario.s_Actual != null? Usuario.s_Actual.ID:0 ,Permiso.UsuarioBaja)){
+                            <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(u)">Eliminar</button>
+                        }
                     }
                 </td>
             </tr>
@@ -38,7 +46,9 @@
     </tbody>
 </table>
 <div>
-    <button class="btn btn-primary" @onclick="Agregar">Agregar Usuario</button>
+    @if(servicioAutorizacion.PoseeElPermiso(Usuario.s_Actual != null? Usuario.s_Actual.ID:0 ,Permiso.UsuarioAlta)){
+       <button class="btn btn-primary" @onclick="Agregar">Agregar Usuario</button>
+    }
     <EditarUsuario @ref="editar" OnUsuarioAgregado="RefrescarLista" />
 </div>
 @code {
@@ -49,6 +59,7 @@
     }
     EditarUsuario editar=null!;
     EliminarEntidad eliminar=null!;
+    EditarPermisos editarPermisos = null!;
     Usuario? UserElim {get;set;}
     string msg {get;set;} = "";
     public void Agregar()
@@ -56,6 +67,10 @@
         editar.Mostrar(true);
         StateHasChanged();
     }
+    public void MostrarPermisos(Usuario u){
+        editarPermisos.Mostrar(true, u.ID);
+        StateHasChanged();
+    }   
     public void Editar(Usuario u)
     {
         editar.Mostrar(false,u);
@@ -71,7 +86,7 @@
     {
         try
         {
-            EliminarUsuarioUseCase.Ejecutar(Convert.ToInt32(u.ID),Usuario.s_Actual.ID);
+            EliminarUsuarioUseCase.Ejecutar(Convert.ToInt32(u.ID),Usuario.s_Actual != null? Usuario.s_Actual.ID:0);
         }
         catch(FalloAutorizacionException e)
         {
@@ -83,11 +98,11 @@
             msg=e.Message;
             eliminar.Mostrar(true);
         }
-        _lista = ListarUsuariosUseCase.Ejecutar(Usuario.s_Actual.ID);
+        _lista = ListarUsuariosUseCase.Ejecutar(Usuario.s_Actual != null? Usuario.s_Actual.ID:0);
     }
     void RefrescarLista()
     {
-    _lista = ListarUsuariosUseCase.Ejecutar(Usuario.s_Actual.ID);
+    _lista = ListarUsuariosUseCase.Ejecutar(Usuario.s_Actual != null? Usuario.s_Actual.ID:0);
     StateHasChanged();
     }
 }

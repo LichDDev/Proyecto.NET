@@ -4,6 +4,7 @@
 @inject EliminarEventoDeportivoUseCase EliminarEventoDeportivoUseCase
 @inject ModificarPersonaUseCase ModificarEventoDeportivoUseCase
 @inject ListarEventosDeportivosUseCase ListarEventosDeportivosUseCase
+@inject ServicioAutorizacion servicioAutorizacion
 @inject ListarEventosConCupoDisponibleUseCase ListarEventosConCupoDisponibleUseCase
 <EliminarEntidad @ref="eliminar" Mensaje="@msg" OnConfirmado="()=>Eliminar(EvenElim?? new EventoDeportivo(0))"/>
 <PageTitle>Eventos</PageTitle>
@@ -35,15 +36,21 @@
                 <td>@e.CupoMaximo</td>
                 <td>@e.ResponsableId</td>
                 <td>
-                    <button class="btn btn-primary" @onclick="()=>Editar(e)">Editar</button>
-                    <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(e)">Eliminar</button>
+                    @if(servicioAutorizacion.PoseeElPermiso(Usuario.s_Actual != null? Usuario.s_Actual.ID:0 ,Permiso.EventoModificacion)){
+                        <button class="btn btn-primary" @onclick="()=>Editar(e)">Editar</button>
+                     }
+                    @if(servicioAutorizacion.PoseeElPermiso(Usuario.s_Actual != null? Usuario.s_Actual.ID:0 ,Permiso.EventoBaja)){
+                        <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(e)">Eliminar</button>
+                     }
                 </td>
             </tr>
         }
     </tbody>
 </table>
 <div>
-    <button class="btn btn-primary" @onclick="Agregar">Agregar Evento</button>
+    @if(servicioAutorizacion.PoseeElPermiso(Usuario.s_Actual != null? Usuario.s_Actual.ID:0 ,Permiso.EventoAlta)){
+        <button class="btn btn-primary" @onclick="Agregar">Agregar Evento</button>
+    }
     <EditarEvento @ref="editar" OnEventoAgregado="RefrescarLista" />
 </div>
 @code {
@@ -81,7 +88,7 @@
     {
         try
         {
-            EliminarEventoDeportivoUseCase.Ejecutar(e.ID,Usuario.s_Actual.ID);
+            EliminarEventoDeportivoUseCase.Ejecutar(e.ID,Usuario.s_Actual != null? Usuario.s_Actual.ID:0);
         }
         catch(FalloAutorizacionException ex)
         {

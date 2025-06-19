@@ -3,7 +3,6 @@
 @inject ModificarUsuarioUseCase ModificarUsuarioUseCase
 @inject NavigationManager Navegador
 <h1>Mi Perfil</h1>
-<h3>Mi Informacion</h3>
 <div class="Forma">
   <div class="Tags">
     <ul>
@@ -38,7 +37,7 @@
 </div>
 
 @code {
-  private bool visible;
+  //private bool visible;
   string? nom;
   string? ape;
   string? mail;
@@ -56,15 +55,15 @@
     }
 }
 
-  public void Mostrar()
+  /*public void Mostrar()
   {
     visible = true;
     StateHasChanged();
-  }
+  }*/
   public void Save()
   {
     u=new Usuario(nom,ape,mail,cont);
-    u.ID=Usuario.s_Actual.ID;
+    u.ID=Usuario.s_Actual!=null ? Usuario.s_Actual.ID:0;
     try
     {
       ModificarUsuarioUseCase.Ejecutar(u,1);//Le paso 1 que es siempre el primer ID, y por lo tanto el admin asi siempre se puede modificar

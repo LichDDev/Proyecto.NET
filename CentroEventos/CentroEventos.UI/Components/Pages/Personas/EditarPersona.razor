@@ -70,11 +70,11 @@
         {
             if(accion)
             {
-                AgregarPersonaUseCase.Ejecutar(new Persona(dni,nom,ape,email,tel),Usuario.s_Actual.ID);
+                AgregarPersonaUseCase.Ejecutar(new Persona(dni,nom,ape,email,tel),Usuario.s_Actual!=null ? Usuario.s_Actual.ID:0);
             }
             else
             {
-                ModificarPersonaUseCase.Ejecutar(new Persona(id,dni,nom,ape,email,tel),Usuario.s_Actual.ID);
+                ModificarPersonaUseCase.Ejecutar(new Persona(id,dni,nom,ape,email,tel),Usuario.s_Actual!=null ? Usuario.s_Actual.ID:0);
             }
             StateHasChanged();
             OnPersonaAgregada.InvokeAsync(); 

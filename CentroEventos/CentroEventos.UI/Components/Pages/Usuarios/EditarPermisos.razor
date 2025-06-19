@@ -1,0 +1,54 @@
+﻿@rendermode InteractiveServer
+@inject ListarPermisosUseCase listarPermisosUseCase
+@inject RetirarPermisoUseCase retirarPermisoUseCase
+<EliminarEntidad @ref="eliminar" OnConfirmado="()=>Eliminar(idUsuario,PerElim)" Mensaje="@msg"/>
+@if(visible){
+    <div class="Inicio-Container">
+        <div class="Inicio-Datos">
+            <thead>
+                <th>Permisos</th>
+                <div class="Salir">
+                    <button class="bi bi-x-circle fs-2 d-flex align-items-center" aria-hidden="true" @onclick="Close"></button>
+                </div>
+            </thead>
+            <tbody>
+                @foreach(var per in permisos){
+                    <button @onclick="()=>ConfirmarEliminacion(per)">@per</button>
+                }
+            </tbody>
+        </div>
+    </div>
+}
+@code {
+    bool visible = false;
+    EliminarEntidad eliminar = null!;
+    public List<Permiso> permisos = new List<Permiso>(); 
+    int idUsuario;
+    Permiso PerElim;
+    string msg ="";
+    public void Mostrar(bool ok, int idUsuario){
+        visible = ok;
+        this.idUsuario = idUsuario;
+        permisos = listarPermisosUseCase.Ejecutar(idUsuario);
+        StateHasChanged();
+    }
+    protected override void OnInitialized()
+    {
+        permisos = listarPermisosUseCase.Ejecutar(idUsuario);
+    }
+    public void ConfirmarEliminacion(Permiso u)
+    {
+        msg =$"¿Desea eliminar el Permiso {u}?";
+        PerElim = u;
+        visible = false;
+        eliminar.Mostrar(false);
+    }
+    public void Eliminar(int id,Permiso permiso){
+        retirarPermisoUseCase.Ejecutar(id,permiso);
+        permisos = listarPermisosUseCase.Ejecutar(id);
+
+    }
+    public void Close(){
+        visible = false;
+    }
+}   

@@ -35,7 +35,7 @@
     bool accion;
     string? mensaje;
     private bool visible=false;
-  
+    EditarPermisos editarPermisos = null!;
     public void Mostrar(bool accion,Usuario? u=null)
     {
         visible=true;
@@ -67,7 +67,7 @@
             }
             else
             {
-                ModificarUsuarioUseCase.Ejecutar(new Usuario(id.Value,nom,ape,email,cont),Usuario.s_Actual.ID);
+                ModificarUsuarioUseCase.Ejecutar(new Usuario(id ??0,nom,ape,email,cont),Usuario.s_Actual!=null ? Usuario.s_Actual.ID:0);
             }
             StateHasChanged();
             OnUsuarioAgregado.InvokeAsync(); 

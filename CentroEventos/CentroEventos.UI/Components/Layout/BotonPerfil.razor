@@ -6,7 +6,7 @@
         <div class="Contenido">
           <img src="Perfil.png">
           <div class="Centrado">
-          <h3 class="NombreUsuario">@Usuario.s_Actual.Nombre @Usuario.s_Actual.Apellido</h3>
+          <h3 class="NombreUsuario">@(Usuario.s_Actual != null? Usuario.s_Actual.Nombre : "none")  @(Usuario.s_Actual!=null? Usuario.s_Actual.Apellido: "none")</h3>
           </div>
           <button class="btn btn-light btnGest" @onclick="Gestion">Gestionar Perfil</button>
           <button class="btn btn-light btnClose" @onclick="Cerrar">Cerrar Sesion</button>

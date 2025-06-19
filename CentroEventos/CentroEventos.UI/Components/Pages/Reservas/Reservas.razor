@@ -3,6 +3,7 @@
 @inject AgregarReservaUseCase AgregarReservaUseCase
 @inject EliminarReservaUseCase EliminarReservaUseCase
 @inject ModificarReservaUseCase ModificarReservaUseCase
+@inject ServicioAutorizacion servicioAutorizacion
 @inject ListarReservasUseCase ListarReservasUseCase
 <EliminarEntidad @ref="eliminar" Mensaje="@msg" OnConfirmado="()=>Eliminar(ResElim ?? new Reserva(0,0,null,null){ ID = 0})"/>
 <PageTitle>Reservas</PageTitle>
@@ -27,15 +28,21 @@
                 <td>@r.FechaAltaReserva</td>
                 <td>@r.EstadoAsistencia</td>
                 <td>
-                    <button class="btn btn-primary" @onclick="()=>Editar(r)">Editar</button>
-                    <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(r)">Eliminar</button>
+                     @if(servicioAutorizacion.PoseeElPermiso(Usuario.s_Actual != null? Usuario.s_Actual.ID:0 ,Permiso.ReservaModificacion)){
+                        <button class="btn btn-primary" @onclick="()=>Editar(r)">Editar</button>
+                     }
+                     @if(servicioAutorizacion.PoseeElPermiso(Usuario.s_Actual != null? Usuario.s_Actual.ID:0 ,Permiso.ReservaBaja)){
+                        <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(r)">Eliminar</button>
+                     }
                 </td>
             </tr>
         }
     </tbody>
 </table>
 <div>
-    <button class="btn btn-primary" @onclick="Agregar">Agregar Reserva</button>
+    @if(servicioAutorizacion.PoseeElPermiso(Usuario.s_Actual != null? Usuario.s_Actual.ID:0 ,Permiso.ReservaAlta)){
+        <button class="btn btn-primary" @onclick="Agregar">Agregar Reserva</button>
+    }
     <EditarReserva @ref="editar" OnReservaAgregada="RefrescarLista" />
 </div>
 @code {
@@ -68,7 +75,7 @@
     {
         try
         {
-            EliminarReservaUseCase.Ejecutar(r.ID,Usuario.s_Actual.ID);
+            EliminarReservaUseCase.Ejecutar(r.ID,Usuario.s_Actual != null? Usuario.s_Actual.ID:0);
         }
         catch(FalloAutorizacionException e)
         {

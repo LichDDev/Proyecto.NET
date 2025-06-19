@@ -3,6 +3,7 @@
 @inject AgregarPersonaUseCase AgregarPersonaUseCase
 @inject EliminarPersonaUseCase EliminarPersonaUseCase
 @inject ModificarPersonaUseCase ModificarPersonaUseCase
+@inject ServicioAutorizacion servicioAutorizacion
 @inject ListarPersonasUseCase ListarPersonasUseCase
 <EliminarEntidad @ref="eliminar" OnConfirmado="()=>Eliminar(PerElim ?? new Persona(0))" Mensaje="@msg"/>
 <PageTitle>Personas</PageTitle>
@@ -30,8 +31,12 @@
                 <td>@p.Email</td>
                 <td>@p.Telefono</td>
                 <td>
-                    <button class="btn btn-primary" @onclick="()=>Editar(p)">Editar</button>
-                    <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(p)">Eliminar</button>
+                    @if(servicioAutorizacion.PoseeElPermiso(Usuario.s_Actual != null? Usuario.s_Actual.ID:0 ,Permiso.PersonaModificacion)){
+                        <button class="btn btn-primary" @onclick="()=>Editar(p)">Editar</button>
+                    }
+                    @if(servicioAutorizacion.PoseeElPermiso(Usuario.s_Actual != null? Usuario.s_Actual.ID:0 ,Permiso.PersonaBaja)){
+                        <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(p)">Eliminar</button>
+                    }
                 </td>
             </tr>
         }
@@ -39,7 +44,9 @@
 </table>
 
 <div>
-    <button class="btn btn-primary" @onclick="Agregar">Agregar Persona</button>
+    @if(servicioAutorizacion.PoseeElPermiso(Usuario.s_Actual != null? Usuario.s_Actual.ID:0 ,Permiso.PersonaAlta)){
+       <button class="btn btn-primary" @onclick="Agregar">Agregar Persona</button>
+    }
     <EditarPersona @ref="editar" OnPersonaAgregada="RefrescarLista" />
 </div>
 @code {
@@ -72,7 +79,7 @@
     {
         try
         {
-            EliminarPersonaUseCase.Ejecutar(Convert.ToInt32(p.ID),Usuario.s_Actual.ID);
+            EliminarPersonaUseCase.Ejecutar(Convert.ToInt32(p.ID),Usuario.s_Actual!=null? Usuario.s_Actual.ID:0);
         }
         catch(FalloAutorizacionException e)
         {
