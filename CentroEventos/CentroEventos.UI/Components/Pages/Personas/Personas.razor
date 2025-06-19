@@ -7,6 +7,7 @@
 @inject ListarPersonasUseCase ListarPersonasUseCase
 @inject ListarReservasUseCase ListarReservasUseCase
 @inject ListarEventosDeportivosUseCase ListarEventosDeportivosUseCase
+@inject ListarAsistenciaAEventoUseCase listarAsistenciaAEventoUseCase
 <EliminarEntidad @ref="eliminar" OnConfirmado="()=>Eliminar(PerElim ?? new Persona(0))" Mensaje="@msg"/>
 <PageTitle>Personas</PageTitle>
 <h1>Personas</h1>
@@ -21,11 +22,11 @@
             <th>TELEFONO</th>
             <th>ACCION</th>
             <td>
-                <select @onchange="FiltrarPorEvento">
-                    <option value="Mostrar Todos">Mostrar Todos</option>
-                    @foreach(var evento in listaEventos)
+                <select @bind="Eve" name="Eventos/EventosPasados">
+                    <option value="@int.Parse("9999")">Mostrar Todos</option>
+                    @foreach(var evento in listaEventos.Where(r=>DateTime.Parse(r.FechaHoraInicio??"0/0/0000")< DateTime.Now))
                     {
-                        <option value="@evento.Nombre">@evento.Nombre</option>
+                        <option value="@evento.ID">@evento.Nombre</option>
                     }
                 </select>
             </td>
@@ -62,7 +63,7 @@
 </div>
 @code {
     string eventoSeleccionado = "Mostrar Todos";
-
+    private int eve;
     List<Persona> _lista=new List<Persona>();
     List<EventoDeportivo> listaEventos=null!;
     protected override void OnInitialized()
@@ -70,6 +71,21 @@
         listaEventos=ListarEventosDeportivosUseCase.Ejecutar();
         _lista=ListarPersonasUseCase.Ejecutar();
         StateHasChanged();
+    }
+    public int Eve{
+        get{return eve;}
+        set{
+            if (value == 9999)
+            {
+                _lista = ListarPersonasUseCase.Ejecutar();
+            }
+            else
+            {
+                _lista = listarAsistenciaAEventoUseCase.Ejecutar(value);
+            }
+            eve = value;
+        StateHasChanged();
+        }
     }
     EditarPersona editar=null!;
     EliminarEntidad eliminar=null!;
@@ -108,26 +124,6 @@
             eliminar.Mostrar(true);
         }
         _lista = ListarPersonasUseCase.Ejecutar();
-    }
-    private async Task FiltrarPorEvento(ChangeEventArgs e)
-    {
-        eventoSeleccionado = e.Value?.ToString() ?? "Mostrar Todos";
-
-        if (eventoSeleccionado == "Mostrar Todos")
-        {
-            _lista = ListarPersonasUseCase.Ejecutar();
-        }
-        else
-        {
-            var reservas = ListarReservasUseCase.Ejecutar();
-            var evento = listaEventos.FirstOrDefault(ev => ev.Nombre == eventoSeleccionado);
-            if (evento != null)
-            {
-                var idsPersonas = reservas.Where(r => r.EventoDeportivoId == evento.ID).Select(r => r.PersonaId).Distinct().ToList();
-                var todasLasPersonas = ListarPersonasUseCase.Ejecutar();
-                _lista = todasLasPersonas.Where(p => idsPersonas.Contains(p.ID.Value)).ToList();
-            }
-        }
         StateHasChanged();
     }
     void RefrescarLista()
@@ -143,7 +139,7 @@
             if (evento != null)
             {
                 var idsPersonas = reservas.Where(r => r.EventoDeportivoId == evento.ID).Select(r => r.PersonaId).Distinct().ToList();
-                _lista = ListarPersonasUseCase.Ejecutar().Where(p => idsPersonas.Contains(p.ID.Value)).ToList();
+                _lista = ListarPersonasUseCase.Ejecutar().Where(p => idsPersonas.Contains(Convert.ToInt32(p.ID))).ToList();
             }
         }
         StateHasChanged();
