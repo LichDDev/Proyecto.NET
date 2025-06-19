@@ -49,7 +49,6 @@ builder.Services.AddScoped<IValidadorReserva, ValidacionReserva>();
 builder.Services.AddScoped<IValidadorUsuario, ValidacionUsuario>();
 
 
-CentroDeportivoSqLite.Delet();
 CentroDeportivoSqLite.Inicializar();
 
 var app = builder.Build();

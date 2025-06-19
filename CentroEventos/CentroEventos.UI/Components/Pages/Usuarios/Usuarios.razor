@@ -1,6 +1,10 @@
 @page "/Usuarios"
 @rendermode InteractiveServer
+@inject AgregarUsuarioUseCase AgregarUsuarioUseCase
+@inject EliminarUsuarioUseCase EliminarUsuarioUseCase
+@inject ModificarUsuarioUseCase ModificarUsuarioUseCase
 @inject ListarUsuariosUseCase ListarUsuariosUseCase
+<EliminarEntidad @ref="eliminar" OnConfirmado="()=>Eliminar(UserElim ?? new Usuario(0))" Mensaje="@msg"/>
 <PageTitle>Usuarios</PageTitle>
 <h1>Usuarios</h1>
 <table class="table">
@@ -22,14 +26,68 @@
                 <td>@u.Apellido</td>
                 <td>@u.Email</td>
                 <td>@u.Contraseña</td>
+                <td>
+                    @if(u.ID != Usuario.s_Actual.ID || u.ID!=1)
+                    {
+                        <button class="btn btn-primary" @onclick="()=>Editar(u)">Editar</button>
+                        <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(u)">Eliminar</button>
+                    }
+                </td>
             </tr>
         }
     </tbody>
 </table>
+<div>
+    <button class="btn btn-primary" @onclick="Agregar">Agregar Usuario</button>
+    <EditarUsuario @ref="editar" OnUsuarioAgregado="RefrescarLista" />
+</div>
 @code {
     List<Usuario> _lista=new List<Usuario>();
     protected override void OnInitialized()
     {
         _lista=ListarUsuariosUseCase.Ejecutar(1);
+    }
+    EditarUsuario editar=null!;
+    EliminarEntidad eliminar=null!;
+    Usuario? UserElim {get;set;}
+    string msg {get;set;} = "";
+    public void Agregar()
+    {
+        editar.Mostrar(true);
+        StateHasChanged();
+    }
+    public void Editar(Usuario u)
+    {
+        editar.Mostrar(false,u);
+        StateHasChanged();
+    }
+    public void ConfirmarEliminacion(Usuario u)
+    {
+        msg =$"¿Desea eliminar al usuario {u.Nombre} {u.Apellido}?";
+        UserElim = u;
+        eliminar.Mostrar(false);
+    }
+    private void Eliminar(Usuario u)
+    {
+        try
+        {
+            EliminarUsuarioUseCase.Ejecutar(Convert.ToInt32(u.ID),Usuario.s_Actual.ID);
+        }
+        catch(FalloAutorizacionException e)
+        {
+            msg=e.Message;
+            eliminar.Mostrar(true);
+        }
+        catch(Exception e)
+        {
+            msg=e.Message;
+            eliminar.Mostrar(true);
+        }
+        _lista = ListarUsuariosUseCase.Ejecutar(Usuario.s_Actual.ID);
+    }
+    void RefrescarLista()
+    {
+    _lista = ListarUsuariosUseCase.Ejecutar(Usuario.s_Actual.ID);
+    StateHasChanged();
     }
 }

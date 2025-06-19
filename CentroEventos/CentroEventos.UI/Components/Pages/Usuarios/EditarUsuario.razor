@@ -1,17 +1,12 @@
 @rendermode InteractiveServer
-@inject AgregarPersonaUseCase AgregarPersonaUseCase
-@inject ModificarPersonaUseCase ModificarPersonaUseCase
+@inject AgregarUsuarioUseCase AgregarUsuarioUseCase
+@inject ModificarUsuarioUseCase ModificarUsuarioUseCase
 @if(visible)
 {
     <div class="Contenedor">
         <div class="Datos">
-            <h1>@(accion ? "Agregar Persona" : "Modificar Persona")</h1>
-            @if(!poseePermiso)
-            {
-                <pre>@mensaje</pre>
-
-            }
-            else if(error)
+            <h1>@(accion ? "Agregar Usuario" : "Modificar Usuario")</h1>
+            @if(!poseePermiso ||error)
             {
                 <pre>@mensaje</pre>
             }
@@ -19,50 +14,48 @@
                 <button class="bi bi-x-circle fs-2 d-flex align-items-center" aria-hidden="true" @onclick="Close"></button>
             </div>
             <div class="Recuadros">
-                <input type="text"placeholder="DNI"@bind="dni" /><br>
                 <input type="text"placeholder="Nombre"@bind="nom" /><br>
                 <input type="text" placeholder="Apellido"@bind="ape" /><br>
                 <input type="text" placeholder="Email"@bind="email" /><br>
-                <input type="text" placeholder="Telefono"@bind="tel" /><br>
+                <input type="password" placeholder="Contraseña"@bind="cont" /><br>
             </div>
-            <button class="btn btn-primary" @onclick="Editar">@(accion ? "Agregar Persona" : "Modificar Persona")</button>
+            <button class="btn btn-primary" @onclick="Editar">@(accion ? "Agregar Usuario" : "Modificar Usuario")</button>
         </div>
     </div>
 }
 @code
 {
-    string? dni;
+    int? id;
     string? nom;
     string? ape;
     string? email;
-    string? tel;
+    string? cont;
     bool poseePermiso=true;
     bool error=false;
     bool accion;
     string? mensaje;
     private bool visible=false;
-    int? id;
-    public void Mostrar(bool accion,Persona? p=null)
+  
+    public void Mostrar(bool accion,Usuario? u=null)
     {
         visible=true;
         this.accion = accion;
-        if (p is not null)
+        if (u is not null)
         {
-            dni  = p.DNI;
-            nom  = p.Nombre;
-            ape  = p.Apellido;
-            email = p.Email;
-            tel  = p.Telefono;
-            id=p.ID;
+            nom  = u.Nombre;
+            ape  = u.Apellido;
+            email = u.Email;
+            cont  = u.Contraseña;
+            id = u.ID;
         }
         else
         {
-            dni = nom = ape = email = tel = null;
+            nom = ape = email = cont = null;
             id = null;
         }
         StateHasChanged();
     }
-    [Parameter] public EventCallback OnPersonaAgregada { get; set; }
+    [Parameter] public EventCallback OnUsuarioAgregado { get; set; }
 
     void Editar()
     {
@@ -70,14 +63,14 @@
         {
             if(accion)
             {
-                AgregarPersonaUseCase.Ejecutar(new Persona(dni,nom,ape,email,tel),Usuario.s_Actual.ID);
+                AgregarUsuarioUseCase.Ejecutar(new Usuario(nom,ape,email,cont));
             }
             else
             {
-                ModificarPersonaUseCase.Ejecutar(new Persona(id,dni,nom,ape,email,tel),Usuario.s_Actual.ID);
+                ModificarUsuarioUseCase.Ejecutar(new Usuario(id.Value,nom,ape,email,cont),Usuario.s_Actual.ID);
             }
             StateHasChanged();
-            OnPersonaAgregada.InvokeAsync(); 
+            OnUsuarioAgregado.InvokeAsync(); 
             visible = false;
         }
         catch(FalloAutorizacionException e)
