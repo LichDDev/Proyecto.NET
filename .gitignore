@@ -1,2 +1,4 @@
 **/bin/
 **/obj/
+**.sqlite
+CentroEventos/CentroEventos.UI/CentroDeportivo.sqlite
