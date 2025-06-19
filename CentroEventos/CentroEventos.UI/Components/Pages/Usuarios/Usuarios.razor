@@ -29,7 +29,7 @@
                 <td>@u.Email</td>
                 <td>@u.Contraseña</td>
                 <td>
-                    @if(true || u.ID != (Usuario.s_Actual!=null ? Usuario.s_Actual.ID:0) || u.ID!=1)
+                    @if(true || u.ID != (Usuario.s_Actual!=null ? Usuario.s_Actual.ID:0) || u.ID!=1) // sacar el true luego
                     {
                         @if(servicioAutorizacion.PoseeElPermiso(Usuario.s_Actual != null? Usuario.s_Actual.ID:0 ,Permiso.UsuarioModificacion)){
                             <button class="btn btn-primary" @onclick="()=>Editar(u)">Editar</button>
