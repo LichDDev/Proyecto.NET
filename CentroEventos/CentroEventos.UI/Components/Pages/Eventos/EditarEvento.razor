@@ -83,6 +83,7 @@
             StateHasChanged();
             OnEventoAgregado.InvokeAsync(); 
             visible = false;
+            error=false;
         }
         catch(FalloAutorizacionException ex)
         {

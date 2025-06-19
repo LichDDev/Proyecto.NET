@@ -5,6 +5,8 @@
 @inject ModificarPersonaUseCase ModificarPersonaUseCase
 @inject ServicioAutorizacion servicioAutorizacion
 @inject ListarPersonasUseCase ListarPersonasUseCase
+@inject ListarReservasUseCase ListarReservasUseCase
+@inject ListarEventosDeportivosUseCase ListarEventosDeportivosUseCase
 <EliminarEntidad @ref="eliminar" OnConfirmado="()=>Eliminar(PerElim ?? new Persona(0))" Mensaje="@msg"/>
 <PageTitle>Personas</PageTitle>
 <h1>Personas</h1>
@@ -18,6 +20,15 @@
             <th>EMAIL</th>
             <th>TELEFONO</th>
             <th>ACCION</th>
+            <td>
+                <select @onchange="FiltrarPorEvento">
+                    <option value="Mostrar Todos">Mostrar Todos</option>
+                    @foreach(var evento in listaEventos)
+                    {
+                        <option value="@evento.Nombre">@evento.Nombre</option>
+                    }
+                </select>
+            </td>
         </tr>
     </thead>
     <tbody>
@@ -50,9 +61,13 @@
     <EditarPersona @ref="editar" OnPersonaAgregada="RefrescarLista" />
 </div>
 @code {
+    string eventoSeleccionado = "Mostrar Todos";
+
     List<Persona> _lista=new List<Persona>();
+    List<EventoDeportivo> listaEventos=null!;
     protected override void OnInitialized()
     {
+        listaEventos=ListarEventosDeportivosUseCase.Ejecutar();
         _lista=ListarPersonasUseCase.Ejecutar();
         StateHasChanged();
     }
@@ -94,9 +109,44 @@
         }
         _lista = ListarPersonasUseCase.Ejecutar();
     }
+    private async Task FiltrarPorEvento(ChangeEventArgs e)
+    {
+        eventoSeleccionado = e.Value?.ToString() ?? "Mostrar Todos";
+
+        if (eventoSeleccionado == "Mostrar Todos")
+        {
+            _lista = ListarPersonasUseCase.Ejecutar();
+        }
+        else
+        {
+            var reservas = ListarReservasUseCase.Ejecutar();
+            var evento = listaEventos.FirstOrDefault(ev => ev.Nombre == eventoSeleccionado);
+            if (evento != null)
+            {
+                var idsPersonas = reservas.Where(r => r.EventoDeportivoId == evento.ID).Select(r => r.PersonaId).Distinct().ToList();
+                var todasLasPersonas = ListarPersonasUseCase.Ejecutar();
+                _lista = todasLasPersonas.Where(p => idsPersonas.Contains(p.ID.Value)).ToList();
+            }
+        }
+        StateHasChanged();
+    }
     void RefrescarLista()
     {
-    _lista = ListarPersonasUseCase.Ejecutar();
-    StateHasChanged();
+        if (eventoSeleccionado == "Mostrar Todos")
+        {
+            _lista = ListarPersonasUseCase.Ejecutar();
+        }
+        else
+        {
+            var reservas = ListarReservasUseCase.Ejecutar();
+            var evento = listaEventos.FirstOrDefault(ev => ev.Nombre == eventoSeleccionado);
+            if (evento != null)
+            {
+                var idsPersonas = reservas.Where(r => r.EventoDeportivoId == evento.ID).Select(r => r.PersonaId).Distinct().ToList();
+                _lista = ListarPersonasUseCase.Ejecutar().Where(p => idsPersonas.Contains(p.ID.Value)).ToList();
+            }
+        }
+        StateHasChanged();
     }
+
 }
