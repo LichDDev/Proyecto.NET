@@ -16,5 +16,4 @@ public enum Permiso
     UsuarioAlta,            //puede dar de alta Usuarios
     UsuarioModificacion,    //Puede modificar los datos de los usuarios
     UsuarioBaja,            //Puede dar de baja usuarios del sistema
-    UsuarioListar           //Puede ver Los usuarios
 }

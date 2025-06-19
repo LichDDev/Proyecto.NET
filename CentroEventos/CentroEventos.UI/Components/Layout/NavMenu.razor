@@ -40,7 +40,7 @@
     bool permisosAdmin=false;
     protected override void OnInitialized()
     {
-        @if(servicioAutorizacion.PoseeElPermiso(Usuario.s_Actual!=null ? Usuario.s_Actual.ID:0,Permiso.UsuarioListar)){
+        @if(servicioAutorizacion.PoseeElPermiso(Usuario.s_Actual!=null ? Usuario.s_Actual.ID:0,Permiso.UsuarioAlta) || servicioAutorizacion.PoseeElPermiso(Usuario.s_Actual!=null ? Usuario.s_Actual.ID:0,Permiso.UsuarioModificacion) || servicioAutorizacion.PoseeElPermiso(Usuario.s_Actual!=null ? Usuario.s_Actual.ID:0,Permiso.UsuarioBaja) ){
             permisosAdmin=true;    
         }
         else
