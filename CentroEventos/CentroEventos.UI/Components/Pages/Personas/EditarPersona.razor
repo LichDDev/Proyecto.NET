@@ -70,11 +70,11 @@
         {
             if(accion)
             {
-                AgregarPersonaUseCase.Ejecutar(new Persona(dni,nom,ape,email,tel),Usuario.s_miId);
+                AgregarPersonaUseCase.Ejecutar(new Persona(dni,nom,ape,email,tel),Usuario.s_Actual.ID);
             }
             else
             {
-                ModificarPersonaUseCase.Ejecutar(new Persona(id,dni,nom,ape,email,tel),Usuario.s_miId);
+                ModificarPersonaUseCase.Ejecutar(new Persona(id,dni,nom,ape,email,tel),Usuario.s_Actual.ID);
             }
             StateHasChanged();
             OnPersonaAgregada.InvokeAsync(); 
@@ -89,6 +89,7 @@
         {
             error=true;
             mensaje=e.Message;
+            Console.WriteLine("Salto excepcion");
         }
     }
     public void Close()

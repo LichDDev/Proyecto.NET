@@ -1,0 +1,58 @@
+.Cont{
+    position:relative;
+    top:0; left:0; right:0;
+    background:rgba(255, 255, 255, 0.219);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+.Contenido{
+    right: -40px;
+    top:230px;
+    position: relative;
+    height: 400px;
+    width: 300px;
+    z-index: 20;
+    background:#ffffff;
+    padding:2rem;
+    border-radius:0.5rem;
+    box-shadow:0 0 10px rgba(0, 0, 0, 0.596);
+    align-items: center;
+    align-content:center;
+}
+.Contenido img{
+    margin: 32%;
+    margin-top: -40%;
+    width: 80px;
+    height: auto;
+}
+.Contenido .btnGest{
+    position: relative;
+    top: 10px;
+    left:10px;
+    border-color: rgb(198, 198, 198);
+    border-radius:1rem;
+    width: 200px;
+    height: 35px;
+}
+.Contenido .btnClose{
+    position: relative;
+    top: 70px;
+    left:50px;
+    border-color: rgb(198, 198, 198);
+    border-radius:0.2rem;
+    width: 125px;
+}
+.Contenido .Centrado{
+    align-items: center;
+    align-content:center;
+}
+button{
+    border-style: none;
+    background-color: rgba(0, 0, 0, 0);
+}
+.NombreUsuario{
+    position: relative;
+    bottom:10%;
+    
+}

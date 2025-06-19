@@ -2,7 +2,7 @@
 @rendermode InteractiveServer
 @inject AgregarUsuarioUseCase AgregarUsuarioUseCase
 @inject VerificarUsuarioUseCase verificarUsuarioUseCase
-@inject BuscarIdUseCase BuscarIdUseCase
+@inject BuscarUsuarioUseCase BuscarUsuarioUseCase
 @inject NavigationManager Navegador
 <PageTitle>Inicio</PageTitle>
 @if(visible)
@@ -57,26 +57,28 @@
     {
         if(verificarUsuarioUseCase.Ejecutar(new Usuario("none","none",email,password))){
             correcto = true;
-            Usuario.s_miId= BuscarIdUseCase.Ejecutar(email!= null? email:"none");
+            Usuario.s_Actual= BuscarUsuarioUseCase.Ejecutar(email!= null? email:"none");
             visible=false;
-            Navegador.NavigateTo("Personas");
+            Navegador.NavigateTo("/Personas");
         }
         else{
             correcto = false;
             StateHasChanged();
         }
     }
+    Usuario? user;
     public void SignUp()
     {
-        visible=false;
         try
         {
-            AgregarUsuarioUseCase.Ejecutar(new Usuario(nom,ape,email,password));
-            Usuario.s_miId=BuscarIdUseCase.Ejecutar(email == null? "": email);
-            Navegador.NavigateTo("Personas");
+            AgregarUsuarioUseCase.Ejecutar(user=new Usuario(nom,ape,email,password));
+            Usuario.s_Actual=BuscarUsuarioUseCase.Ejecutar(email ?? "none");
+            visible=false;
+            Navegador.NavigateTo("/Personas");
         }
         catch(Exception e)
         {
+            Console.WriteLine(e.Message);
             error=true;
             mensaje=e.Message;
             StateHasChanged();

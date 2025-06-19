@@ -81,7 +81,7 @@
     {
         try
         {
-            EliminarEventoDeportivoUseCase.Ejecutar(e.ID,Usuario.s_miId);
+            EliminarEventoDeportivoUseCase.Ejecutar(e.ID,Usuario.s_Actual.ID);
         }
         catch(FalloAutorizacionException ex)
         {

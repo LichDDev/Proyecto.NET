@@ -68,7 +68,7 @@
     {
         try
         {
-            EliminarReservaUseCase.Ejecutar(r.ID,Usuario.s_miId);
+            EliminarReservaUseCase.Ejecutar(r.ID,Usuario.s_Actual.ID);
         }
         catch(FalloAutorizacionException e)
         {

@@ -1,0 +1,85 @@
+@page "/GestionPerfil"
+@rendermode InteractiveServer
+@inject ModificarUsuarioUseCase ModificarUsuarioUseCase
+@inject NavigationManager Navegador
+<h1>Mi Perfil</h1>
+<h3>Mi Informacion</h3>
+<div class="Forma">
+  <div class="Tags">
+    <ul>
+      <li>
+        <p>Nombre</p>
+      </li>
+      <li>
+        <p>Apellido</p>
+      </li>
+      <li>
+        <p>Email</p>
+      </li>
+      <li>
+        <p>Contraseña</p>
+      </li>
+    </ul>
+  </div>
+  <div class="inputs">
+    @if(error)
+    {
+      <pre>@mensaje</pre>
+    }
+    <input type="text" placeholder="Nombre" @bind="nom" /><br>
+    <input type="text" placeholder="Apellido" @bind="ape" /><br>
+    <input type="text" placeholder="Email" @bind="mail" /><br>
+    <input type="password" placeholder="Contraseña"@bind="cont" /><br>
+    <div class="botones">
+      <button class="btn btn-success btnGest" @onclick="Save">Guardar</button>
+      <button class="btn btn-secondary btnClose" @onclick="Close">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+@code {
+  private bool visible;
+  string? nom;
+  string? ape;
+  string? mail;
+  string? cont;
+  Usuario? u;
+  private bool error=false;
+  string? mensaje;
+  protected override void OnInitialized()
+{
+    if (Usuario.s_Actual is not null)
+    {
+        nom = Usuario.s_Actual.Nombre;
+        ape = Usuario.s_Actual.Apellido;
+        mail = Usuario.s_Actual.Email;
+    }
+}
+
+  public void Mostrar()
+  {
+    visible = true;
+    StateHasChanged();
+  }
+  public void Save()
+  {
+    u=new Usuario(nom,ape,mail,cont);
+    u.ID=Usuario.s_Actual.ID;
+    try
+    {
+      ModificarUsuarioUseCase.Ejecutar(u,1);//Le paso 1 que es siempre el primer ID, y por lo tanto el admin asi siempre se puede modificar
+      Usuario.s_Actual=u;
+      Navegador.NavigateTo("/");
+    }
+    catch(ValidacionException e)
+    {
+      error=true;
+      mensaje=e.Message;
+    }
+  }
+  public void Close()
+  {
+    Navegador.NavigateTo("/Personas");
+  }
+}
+

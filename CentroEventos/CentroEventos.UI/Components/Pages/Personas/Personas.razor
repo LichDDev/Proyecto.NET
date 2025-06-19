@@ -54,7 +54,6 @@
     string msg {get;set;} = "";
     public void Agregar()
     {
-        Console.WriteLine("A VER SI ESTO SE MUSTRRA");
         editar.Mostrar(true);
         StateHasChanged();
     }
@@ -73,7 +72,7 @@
     {
         try
         {
-            EliminarPersonaUseCase.Ejecutar(Convert.ToInt32(p.ID),Usuario.s_miId);
+            EliminarPersonaUseCase.Ejecutar(Convert.ToInt32(p.ID),Usuario.s_Actual.ID);
         }
         catch(FalloAutorizacionException e)
         {

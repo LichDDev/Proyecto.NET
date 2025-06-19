@@ -1,31 +1,37 @@
 ﻿@rendermode InteractiveServer
+@inject NavigationManager Navegador
     @if (ok)
     {
-      <div style="
-          position:fixed;
-          top:0; left:0; right:0; bottom:0;
-          background:rgba(0,0,0,0.6);
-          display:flex;
-          align-items:center;
-          justify-content:center;
-        ">
-        <div style="
-            background:#fff;
-            padding:2rem;
-            border-radius:0.5rem;
-            box-shadow:0 0 10px rgba(0,0,0,0.3);
-          ">
-          <h1>¡Hola!</h1>
+      <div class="Cont">
+        <div class="Contenido">
+          <img src="Perfil.png">
+          <div class="Centrado">
+          <h3 class="NombreUsuario">@Usuario.s_Actual.Nombre @Usuario.s_Actual.Apellido</h3>
+          </div>
+          <button class="btn btn-light btnGest" @onclick="Gestion">Gestionar Perfil</button>
+          <button class="btn btn-light btnClose" @onclick="Cerrar">Cerrar Sesion</button>
         </div>
       </div>
     }
-    <button @onclick="()=>Abrir()"></button>
+    <button class="bi bi-person-circle fs-2 d-flex align-items-center" @onclick="Abrir"></button>
 
 @code{
-    bool ok = false;
-    public void Abrir()
-    {
-        ok= !ok;
-        StateHasChanged();
-    }
+  bool ok = false;
+  public void Abrir()
+  {
+    ok= !ok;
+    StateHasChanged();
+  }
+  public void Gestion()
+  {
+    Navegador.NavigateTo("/GestionPerfil");
+    ok=!ok;
+    StateHasChanged();
+  }
+  public void Cerrar()
+  {
+    ok= !ok;
+    StateHasChanged();
+    Navegador.NavigateTo("/");
+  }
 }
